@@ -1,0 +1,269 @@
+function Gauge( canvas, options ) {
+	this.canvas = canvas;
+	options = options || {};
+	this.settings = {
+		value: options.value || 0,
+		pointerValue: options.value || 0,
+		label: options.label || '',
+		min: options.min || 0,
+		max: options.max || 100,
+		majorTicks: options.majorTicks || 5,
+		minorTicks: options.minorTicks || 2, // small ticks inside each major tick
+		greenFrom: options.greenFrom || 0,
+		greenTo: options.greenTo || 0,
+		yellowFrom: options.yellowFrom || 0,
+		yellowTo: options.yellowTo || 0,
+		redFrom: options.redFrom || 0,
+		redTo: options.redTo || 0
+	};
+
+
+	this.drawBackground = function( ) {
+		var fill = [ '#111', '#ccc', '#ddd', '#eee' ];
+		var rad = [ this.radius, this.radius - 1, this.radius * 0.98, 
+			this.radius * 0.95 ];
+
+		this.c2d.rotate( this.startDeg ); 
+		for ( var i = 0; i < fill.length; i++ ) {
+			this.c2d.fillStyle = fill[ i ];
+			this.c2d.beginPath();
+			this.c2d.arc( 0, 0, rad[ i ], 0, this.spanDeg, false );
+			this.c2d.fill();
+		}
+	}
+
+	this.drawRange = function( from, to, style, span ) {
+		if ( to > from ) {
+			var span = this.spanDeg * ( to - from ) / 100;
+
+			this.c2d.rotate( this.startDeg ); 
+			this.c2d.fillStyle = style;
+			this.c2d.rotate( this.spanDeg * from / 100 );    
+			this.c2d.beginPath();
+			this.c2d.moveTo( this.innerRadius, 0 );
+			this.c2d.lineTo( this.outerRadius, 0 );
+			this.c2d.arc( 0, 0, this.outerRadius, 0, span, false );
+			this.c2d.rotate( span );
+			this.c2d.lineTo( this.innerRadius, 0 );
+			this.c2d.arc( 0, 0, this.innerRadius, 0, - span, true ); 
+			this.c2d.fill();
+		}
+	}
+
+	this.drawTicks = function( majorTicks, minorTicks ) {
+		// major ticks
+		this.c2d.rotate( this.startDeg ); 
+		this.c2d.lineWidth = this.radius * 0.025;
+		var majorSpan = this.spanDeg / ( majorTicks - 1 ); 
+		for ( var i = 0; i < majorTicks; i++ ) {
+			this.c2d.beginPath();
+			this.c2d.moveTo( this.innerRadius,0 );
+			this.c2d.lineTo( this.outerRadius,0 );
+			this.c2d.stroke();
+
+			// minor ticks
+			if ( i + 1 < majorTicks ) {
+				this.c2d.save();
+				this.c2d.lineWidth = this.radius * 0.01;
+				var minorSpan = majorSpan / ( minorTicks + 1 );
+				for ( var j = 0; j < minorTicks; j++ ) {
+					this.c2d.rotate( minorSpan );
+					this.c2d.beginPath();
+					this.c2d.moveTo( this.innerRadius + ( this.outerRadius - this.innerRadius ) / 3, 0 );
+					this.c2d.lineTo( this.outerRadius, 0 );
+					this.c2d.stroke();
+				}
+				this.c2d.restore();
+			}
+			this.c2d.rotate( majorSpan );
+		}
+	}
+
+	this.drawPointer = function( value ) {
+		function pointer( ctx ) {
+			ctx.c2d.beginPath();
+			ctx.c2d.moveTo( - ctx.radius * 0.2, 0 );
+			ctx.c2d.lineTo(	0, ctx.radius * 0.05 );
+			ctx.c2d.lineTo( ctx.radius * 0.8, 0 );
+			ctx.c2d.lineTo( 0, - ctx.radius * 0.05 );
+			ctx.c2d.lineTo( - ctx.radius * 0.2, 0 );
+		}
+		this.c2d.rotate( this.startDeg ); 
+		this.c2d.rotate( this.spanDeg * value / 100 );    
+		this.c2d.lineWidth = this.radius * 0.015;
+		this.c2d.fillStyle = 'rgba(255, 100, 0, 0.7)';
+		pointer( this );
+		this.c2d.fill();
+		this.c2d.strokeStyle = 'rgba(255, 100, 100, 0.9)';
+		pointer( this );
+		this.c2d.stroke();
+		// center circle
+		this.c2d.fillStyle = 'rgba(0, 100, 255, 1)';
+		this.c2d.beginPath();
+		this.c2d.arc( 0, 0, this.radius * 0.1, 0, Math.PI * 2, true );
+		this.c2d.fill();
+		this.c2d.strokeStyle = 'rgba(0, 0, 255, 1)';
+		this.c2d.beginPath();
+		this.c2d.arc( 0, 0, this.radius * 0.1, 0, Math.PI * 2, true );
+		this.c2d.stroke();
+	}
+	
+	this.drawCaption = function( label ) {
+		if ( label ) {
+			var fontSize = this.radius / 5;
+			this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+			var metrics = this.c2d.measureText( label );
+			this.c2d.fillStyle = 'rgb(0, 0, 0)';
+			var px = - metrics.width / 2;
+			var py = - this.radius * 0.4 + fontSize / 2;
+			this.c2d.fillText( label, px, py );
+		}
+	}
+
+	this.drawValues = function( min, max, value, decimals ) {
+		function formatNum( value, decimals ) {
+			var ret = value.toFixed( decimals );
+			while ( ( decimals > 0 ) && ret.match( /^\d+\.(\d+)?0$/ ) ) {
+					decimals -= 1;
+					ret = value.toFixed( decimals );
+			}
+			return ret;
+		}
+		// value text
+		var fontSize = this.radius / 5;
+		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+		var metrics = this.c2d.measureText( formatNum( value, decimals ) );
+		this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		this.c2d.fillText( formatNum( value, decimals ), - metrics.width / 2, this.radius * 0.72 );
+
+		// min label
+		this.save();
+		var deg = Math.PI * 14.5/8;
+		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ), 
+			this.radius * 0.65 * Math.cos( deg ) );
+		var fontSize = this.radius / 8;
+		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+		var metrics = this.c2d.measureText( formatNum( min, decimals ) );
+		this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		this.c2d.fillText( formatNum( min, decimals ), 0, 0 );
+		this.restore();
+
+		// max label
+		this.save();
+		var deg = Math.PI * 17.5/8;
+		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ), 
+			this.radius * 0.65 * Math.cos( deg ) );
+		var fontSize = this.radius / 8;
+		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+		var metrics = this.c2d.measureText( formatNum( max, decimals ) );
+		this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		this.c2d.fillText( formatNum( max, decimals ), - metrics.width, 0 );
+		this.restore();
+	}
+	this.draw();
+
+	return this;
+}
+
+Gauge.prototype.setValue = function( value ) {
+	var timer = null;
+	var that = this;
+	var increment = Math.abs( that.settings.value - value ) / 25;
+
+	function adjustValue() {
+		if ( that.settings.pointerValue < value ) {
+			that.settings.pointerValue += increment;
+			if ( that.settings.pointerValue + increment >= value ) {
+				that.settings.pointerValue = value;
+				clearInterval( timer );
+			}
+		} else {
+			that.settings.pointerValue -= increment;
+			if ( that.settings.pointerValue - increment <= value ) {
+				that.settings.pointerValue = value; 
+				clearInterval( timer );
+			}
+		}
+		that.draw();
+	}
+
+	if ( this.settings.value != value ) {
+		this.settings.value = value;
+		timer = setInterval( adjustValue, 40 );
+	}
+}
+
+Gauge.prototype.draw = function() {
+
+	if ( ! this.canvas.getContext ) return; //-->
+
+	// settings normalized to a [0, 100] interval
+	function normalize( settings ) {
+		var span = settings.max - settings.min;
+
+		return {
+			min: 0,
+			max: 100,
+			value: ( settings.value - settings.min ) / span * 100,
+			pointerValue: ( settings.pointerValue - settings.min ) / span * 100,
+			label: settings.label || '',
+			greenFrom: ( settings.greenFrom - settings.min ) / span * 100,
+			greenTo: ( settings.greenTo - settings.min ) / span * 100,
+			yellowFrom: ( settings.yellowFrom - settings.min ) / span * 100,
+			yellowTo: ( settings.yellowTo - settings.min ) / span * 100,
+			redFrom: ( settings.redFrom - settings.min ) / span * 100,
+			redTo: ( settings.redTo - settings.min ) / span * 100,
+			// also fix some possible invalid settings
+			majorTicks: Math.max( 2, settings.majorTicks ),
+			minorTicks: Math.max( 0, settings.minorTicks ),
+			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
+		};
+	}
+
+	// draw context contains a set of values useful for
+	// most drawing operations.
+	var relSettings = normalize( this.settings );
+	var drawCtx = {
+		c2d: this.canvas.getContext( '2d' ),
+		startDeg: Math.PI * 5.5 / 8,
+		spanDeg: Math.PI * 13 / 8,
+		save: function() {
+			this.c2d.save();
+		},
+		restore: function() {
+			this.c2d.restore();
+		},
+		call: function( fn ) {
+			var args = Array.prototype.slice.call( arguments );
+			this.save();
+			this.translateCenter();
+			fn.apply( this, args.slice( 1 ) );
+			this.restore();
+		},
+		clear: function() {
+			this.c2d.clearRect( 0, 0, this.width, this.height );
+		},
+		translateCenter: function() {
+			this.c2d.translate( this.centerX, this.centerY );
+		}
+	}
+	drawCtx.width = drawCtx.c2d.canvas.width;
+	drawCtx.height = drawCtx.c2d.canvas.height;
+	drawCtx.radius = Math.min( drawCtx.width / 2 - 4, drawCtx.height / 2 - 4 );
+	drawCtx.innerRadius = drawCtx.radius * 0.7;
+	drawCtx.outerRadius = drawCtx.radius * 0.9;
+	drawCtx.centerX = drawCtx.radius + 4;
+	drawCtx.centerY = drawCtx.radius + 4 + ( drawCtx.radius - 
+		drawCtx.radius * Math.sin( drawCtx.startDeg ) ) / 2;
+
+	// draw everything
+	drawCtx.clear();
+	drawCtx.call( this.drawBackground );
+	drawCtx.call( this.drawRange, relSettings.redFrom, relSettings.redTo, 'rgba(255, 0, 0, 0.2)');
+	drawCtx.call( this.drawRange, relSettings.greenFrom, relSettings.greenTo, 'rgba(0, 255, 0, 0.2)' );
+	drawCtx.call( this.drawRange, relSettings.yellowFrom, relSettings.yellowTo, 'rgba(255, 215, 0, 0.2)' );
+	drawCtx.call( this.drawTicks, relSettings.majorTicks, relSettings.minorTicks );
+	drawCtx.call( this.drawPointer, relSettings.pointerValue );
+	drawCtx.call( this.drawCaption, relSettings.label );
+	drawCtx.call( this.drawValues, this.settings.min, this.settings.max, this.settings.value, relSettings.decimals ); 
+}
