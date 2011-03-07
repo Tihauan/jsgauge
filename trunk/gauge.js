@@ -9,14 +9,13 @@ function Gauge( canvas, options ) {
 		max: options.max || 100,
 		majorTicks: options.majorTicks || 5,
 		minorTicks: options.minorTicks || 2, // small ticks inside each major tick
-		greenFrom: options.greenFrom || 0,
-		greenTo: options.greenTo || 0,
-		yellowFrom: options.yellowFrom || 0,
-		yellowTo: options.yellowTo || 0,
-		redFrom: options.redFrom || 0,
-		redTo: options.redTo || 0
+		greenFrom: [].concat(options.greenFrom || 0),
+		greenTo: [].concat(options.greenTo || 0),
+		yellowFrom: [].concat(options.yellowFrom || 0),
+		yellowTo: [].concat(options.yellowTo || 0),
+		redFrom: [].concat(options.redFrom || 0),
+		redTo: [].concat(options.redTo || 0)
 	};
-
 
 	this.drawBackground = function( ) {
 		var fill = [ '#111', '#ccc', '#ddd', '#eee' ];
@@ -194,30 +193,42 @@ Gauge.prototype.setValue = function( value ) {
 }
 
 Gauge.prototype.draw = function() {
+	var r, g, y;
 
 	if ( ! this.canvas.getContext ) return; //-->
 
 	// settings normalized to a [0, 100] interval
 	function normalize( settings ) {
-		var span = settings.max - settings.min;
+		var i,
+                    span = settings.max - settings.min,
+                    spanPct = span/100;
 
-		return {
+		var normalized={
 			min: 0,
 			max: 100,
-			value: ( settings.value - settings.min ) / span * 100,
-			pointerValue: ( settings.pointerValue - settings.min ) / span * 100,
+			value: ( settings.value - settings.min ) / spanPct,
+			pointerValue: ( settings.pointerValue - settings.min ) / spanPct,
 			label: settings.label || '',
-			greenFrom: ( settings.greenFrom - settings.min ) / span * 100,
-			greenTo: ( settings.greenTo - settings.min ) / span * 100,
-			yellowFrom: ( settings.yellowFrom - settings.min ) / span * 100,
-			yellowTo: ( settings.yellowTo - settings.min ) / span * 100,
-			redFrom: ( settings.redFrom - settings.min ) / span * 100,
-			redTo: ( settings.redTo - settings.min ) / span * 100,
+			greenFrom: [],
+			greenTo: [],
+			yellowFrom: [],
+			yellowTo: [],
+			redFrom: [],
+			redTo: [],
 			// also fix some possible invalid settings
 			majorTicks: Math.max( 2, settings.majorTicks ),
 			minorTicks: Math.max( 0, settings.minorTicks ),
 			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
 		};
+		
+		for(i=settings.greenFrom.length;i--;) normalized.greenFrom[i] = (settings.greenFrom[i] - settings.min)/spanPct;
+		for(i=settings.greenTo.length;i--;) normalized.greenTo[i] = (settings.greenTo[i] - settings.min)/spanPct;
+		for(i=settings.yellowFrom.length;i--;) normalized.yellowFrom[i] = (settings.yellowFrom[i] - settings.min)/spanPct;
+		for(i=settings.yellowTo.length;i--;) normalized.yellowTo[i] = (settings.yellowTo[i] - settings.min)/spanPct;
+		for(i=settings.redFrom.length;i--;) normalized.redFrom[i] = (settings.redFrom[i] - settings.min)/spanPct;
+		for(i=settings.redTo.length;i--;) normalized.redTo[i] = (settings.redTo[i] - settings.min)/spanPct;
+		
+		return normalized; 
 	}
 
 	// draw context contains a set of values useful for
@@ -259,9 +270,12 @@ Gauge.prototype.draw = function() {
 	// draw everything
 	drawCtx.clear();
 	drawCtx.call( this.drawBackground );
-	drawCtx.call( this.drawRange, relSettings.redFrom, relSettings.redTo, 'rgba(255, 0, 0, 0.2)');
-	drawCtx.call( this.drawRange, relSettings.greenFrom, relSettings.greenTo, 'rgba(0, 255, 0, 0.2)' );
-	drawCtx.call( this.drawRange, relSettings.yellowFrom, relSettings.yellowTo, 'rgba(255, 215, 0, 0.2)' );
+	for(r=relSettings.redFrom.length;r--;)
+		drawCtx.call( this.drawRange, relSettings.redFrom[r], relSettings.redTo[r], 'rgba(255, 0, 0, 0.2)');
+	for(g=relSettings.greenFrom.length;g--;)
+		drawCtx.call( this.drawRange, relSettings.greenFrom[g], relSettings.greenTo[g], 'rgba(0, 255, 0, 0.2)' );
+	for(y=relSettings.yellowFrom.length;y--;)
+		drawCtx.call( this.drawRange, relSettings.yellowFrom[y], relSettings.yellowTo[y], 'rgba(255, 215, 0, 0.2)' );
 	drawCtx.call( this.drawTicks, relSettings.majorTicks, relSettings.minorTicks );
 	drawCtx.call( this.drawPointer, relSettings.pointerValue );
 	drawCtx.call( this.drawCaption, relSettings.label );
