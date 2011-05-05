@@ -12,11 +12,17 @@
 		</style>
 	</head>
 	<body>
-		<canvas id="test_default" width="250" height="250"></canvas>
-		<canvas id="test_custom" width="250" height="250"></canvas>
-		<canvas id="test_medium" width="175" height="175"></canvas>
-		<canvas id="test_small" width="100" height="100"></canvas>
-		<script>
+		<div id="sizingTests">
+			<canvas id="test_default" width="250" height="250"></canvas>
+			<canvas id="test_custom" width="250" height="250"></canvas>
+			<canvas id="test_medium" width="175" height="175"></canvas>
+			<canvas id="test_small" width="100" height="100"></canvas>
+		</div>
+		<div id="overflowTests">
+			<canvas id="test_overflow_min" width="250" height="250"></canvas>
+			<canvas id="test_overflow_max" width="250" height="250"></canvas>
+		</div>
+		<script type="text/javascript">
 
 			// Helper to execute a function after the window is loaded,
 			// see http://www.google.com/search?q=addLoadEvent
@@ -90,6 +96,14 @@
 				};
 				var gms = new Gauge( document.getElementById( 'test_small'), options );
 				gms.setValue( 10.55 );
+
+				// Draw gauge and use overflow values (min)
+				var testOverflowMin = new Gauge( document.getElementById( 'test_overflow_min' ), {label: "overflow min"});
+				testOverflowMin.setValue(-10);
+
+				// Draw gauge and use overflow values (max)
+				var testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "overflow max"});
+				testOverflowMax.setValue(110);
 			} );
 		</script>
 	</body>

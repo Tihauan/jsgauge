@@ -19,10 +19,10 @@ function Gauge( canvas, options ) {
 
 	this.drawBackground = function( ) {
 		var fill = [ '#111', '#ccc', '#ddd', '#eee' ];
-		var rad = [ this.radius, this.radius - 1, this.radius * 0.98, 
+		var rad = [ this.radius, this.radius - 1, this.radius * 0.98,
 			this.radius * 0.95 ];
 
-		this.c2d.rotate( this.startDeg ); 
+		this.c2d.rotate( this.startDeg );
 		for ( var i = 0; i < fill.length; i++ ) {
 			this.c2d.fillStyle = fill[ i ];
 			this.c2d.beginPath();
@@ -35,25 +35,25 @@ function Gauge( canvas, options ) {
 		if ( to > from ) {
 			var span = this.spanDeg * ( to - from ) / 100;
 
-			this.c2d.rotate( this.startDeg ); 
+			this.c2d.rotate( this.startDeg );
 			this.c2d.fillStyle = style;
-			this.c2d.rotate( this.spanDeg * from / 100 );    
+			this.c2d.rotate( this.spanDeg * from / 100 );
 			this.c2d.beginPath();
 			this.c2d.moveTo( this.innerRadius, 0 );
 			this.c2d.lineTo( this.outerRadius, 0 );
 			this.c2d.arc( 0, 0, this.outerRadius, 0, span, false );
 			this.c2d.rotate( span );
 			this.c2d.lineTo( this.innerRadius, 0 );
-			this.c2d.arc( 0, 0, this.innerRadius, 0, - span, true ); 
+			this.c2d.arc( 0, 0, this.innerRadius, 0, - span, true );
 			this.c2d.fill();
 		}
 	}
 
 	this.drawTicks = function( majorTicks, minorTicks ) {
 		// major ticks
-		this.c2d.rotate( this.startDeg ); 
+		this.c2d.rotate( this.startDeg );
 		this.c2d.lineWidth = this.radius * 0.025;
-		var majorSpan = this.spanDeg / ( majorTicks - 1 ); 
+		var majorSpan = this.spanDeg / ( majorTicks - 1 );
 		for ( var i = 0; i < majorTicks; i++ ) {
 			this.c2d.beginPath();
 			this.c2d.moveTo( this.innerRadius,0 );
@@ -87,8 +87,8 @@ function Gauge( canvas, options ) {
 			ctx.c2d.lineTo( 0, - ctx.radius * 0.05 );
 			ctx.c2d.lineTo( - ctx.radius * 0.2, 0 );
 		}
-		this.c2d.rotate( this.startDeg ); 
-		this.c2d.rotate( this.spanDeg * value / 100 );    
+		this.c2d.rotate( this.startDeg );
+		this.c2d.rotate( this.spanDeg * value / 100 );
 		this.c2d.lineWidth = this.radius * 0.015;
 		this.c2d.fillStyle = 'rgba(255, 100, 0, 0.7)';
 		pointer( this );
@@ -106,7 +106,7 @@ function Gauge( canvas, options ) {
 		this.c2d.arc( 0, 0, this.radius * 0.1, 0, Math.PI * 2, true );
 		this.c2d.stroke();
 	}
-	
+
 	this.drawCaption = function( label ) {
 		if ( label ) {
 			var fontSize = this.radius / 5;
@@ -132,13 +132,17 @@ function Gauge( canvas, options ) {
 		var fontSize = this.radius / 5;
 		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
 		var metrics = this.c2d.measureText( formatNum( value, decimals ) );
-		this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		if (value < min || value > max) { // Outside min/max ranges?
+			this.c2d.fillStyle = 'rgb(255, 0, 0)';
+		} else {
+			this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		}
 		this.c2d.fillText( formatNum( value, decimals ), - metrics.width / 2, this.radius * 0.72 );
 
 		// min label
 		this.save();
 		var deg = Math.PI * 14.5/8;
-		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ), 
+		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
 			this.radius * 0.65 * Math.cos( deg ) );
 		var fontSize = this.radius / 8;
 		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
@@ -150,7 +154,7 @@ function Gauge( canvas, options ) {
 		// max label
 		this.save();
 		var deg = Math.PI * 17.5/8;
-		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ), 
+		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
 			this.radius * 0.65 * Math.cos( deg ) );
 		var fontSize = this.radius / 8;
 		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
@@ -167,19 +171,24 @@ function Gauge( canvas, options ) {
 Gauge.prototype.setValue = function( value ) {
 	var timer = null;
 	var that = this;
-	var increment = Math.abs( that.settings.value - value ) / 25;
+        var pointerValue = (value > that.settings.max) ?
+                             that.settings.max :  // Nomalize to max value
+                            (value < that.settings.min) ?
+                             that.settings.min :  // Nomalize to min value
+                             value;
+	var increment = Math.abs( that.settings.pointerValue - pointerValue ) / 25;
 
 	function adjustValue() {
-		if ( that.settings.pointerValue < value ) {
+		if ( that.settings.pointerValue < pointerValue ) {
 			that.settings.pointerValue += increment;
-			if ( that.settings.pointerValue + increment >= value ) {
-				that.settings.pointerValue = value;
+			if ( that.settings.pointerValue + increment >= pointerValue ) {
+				that.settings.pointerValue = pointerValue;
 				clearInterval( timer );
 			}
 		} else {
 			that.settings.pointerValue -= increment;
-			if ( that.settings.pointerValue - increment <= value ) {
-				that.settings.pointerValue = value; 
+			if ( that.settings.pointerValue - increment <= pointerValue ) {
+				that.settings.pointerValue = pointerValue;
 				clearInterval( timer );
 			}
 		}
@@ -203,7 +212,14 @@ Gauge.prototype.draw = function() {
                     span = settings.max - settings.min,
                     spanPct = span/100;
 
-		var normalized={
+                // Restrict pointer to range of values
+                if (settings.pointerValue > settings.max){
+                    settings.pointerValue = settings.max;
+                } else if(settings.pointerValue < settings.min){
+                    settings.pointerValue = settings.min;
+                }
+
+		return {
 			min: 0,
 			max: 100,
 			value: ( settings.value - settings.min ) / spanPct,
@@ -220,15 +236,15 @@ Gauge.prototype.draw = function() {
 			minorTicks: Math.max( 0, settings.minorTicks ),
 			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
 		};
-		
+
 		for(i=settings.greenFrom.length;i--;) normalized.greenFrom[i] = (settings.greenFrom[i] - settings.min)/spanPct;
 		for(i=settings.greenTo.length;i--;) normalized.greenTo[i] = (settings.greenTo[i] - settings.min)/spanPct;
 		for(i=settings.yellowFrom.length;i--;) normalized.yellowFrom[i] = (settings.yellowFrom[i] - settings.min)/spanPct;
 		for(i=settings.yellowTo.length;i--;) normalized.yellowTo[i] = (settings.yellowTo[i] - settings.min)/spanPct;
 		for(i=settings.redFrom.length;i--;) normalized.redFrom[i] = (settings.redFrom[i] - settings.min)/spanPct;
 		for(i=settings.redTo.length;i--;) normalized.redTo[i] = (settings.redTo[i] - settings.min)/spanPct;
-		
-		return normalized; 
+
+		return normalized;
 	}
 
 	// draw context contains a set of values useful for
@@ -264,7 +280,7 @@ Gauge.prototype.draw = function() {
 	drawCtx.innerRadius = drawCtx.radius * 0.7;
 	drawCtx.outerRadius = drawCtx.radius * 0.9;
 	drawCtx.centerX = drawCtx.radius + 4;
-	drawCtx.centerY = drawCtx.radius + 4 + ( drawCtx.radius - 
+	drawCtx.centerY = drawCtx.radius + 4 + ( drawCtx.radius -
 		drawCtx.radius * Math.sin( drawCtx.startDeg ) ) / 2;
 
 	// draw everything
@@ -279,5 +295,5 @@ Gauge.prototype.draw = function() {
 	drawCtx.call( this.drawTicks, relSettings.majorTicks, relSettings.minorTicks );
 	drawCtx.call( this.drawPointer, relSettings.pointerValue );
 	drawCtx.call( this.drawCaption, relSettings.label );
-	drawCtx.call( this.drawValues, this.settings.min, this.settings.max, this.settings.value, relSettings.decimals ); 
+	drawCtx.call( this.drawValues, this.settings.min, this.settings.max, this.settings.value, relSettings.decimals );
 }
