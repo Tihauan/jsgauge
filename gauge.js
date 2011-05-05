@@ -31,7 +31,7 @@ function Gauge( canvas, options ) {
 		}
 	}
 
-	this.drawRange = function( from, to, style, span ) {
+	this.drawRange = function( from, to, style ) {
 		if ( to > from ) {
 			var span = this.spanDeg * ( to - from ) / 100;
 
@@ -120,6 +120,7 @@ function Gauge( canvas, options ) {
 	}
 
 	this.drawValues = function( min, max, value, decimals ) {
+		var deg, fontSize, metrics;
 		function formatNum( value, decimals ) {
 			var ret = value.toFixed( decimals );
 			while ( ( decimals > 0 ) && ret.match( /^\d+\.(\d+)?0$/ ) ) {
@@ -128,10 +129,11 @@ function Gauge( canvas, options ) {
 			}
 			return ret;
 		}
+
 		// value text
-		var fontSize = this.radius / 5;
+		fontSize = this.radius / 5;
 		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
-		var metrics = this.c2d.measureText( formatNum( value, decimals ) );
+		metrics = this.c2d.measureText( formatNum( value, decimals ) );
 		if (value < min || value > max) { // Outside min/max ranges?
 			this.c2d.fillStyle = 'rgb(255, 0, 0)';
 		} else {
@@ -141,24 +143,24 @@ function Gauge( canvas, options ) {
 
 		// min label
 		this.save();
-		var deg = Math.PI * 14.5/8;
+		deg = Math.PI * 14.5/8;
 		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
 			this.radius * 0.65 * Math.cos( deg ) );
-		var fontSize = this.radius / 8;
+		fontSize = this.radius / 8;
 		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
-		var metrics = this.c2d.measureText( formatNum( min, decimals ) );
+		metrics = this.c2d.measureText( formatNum( min, decimals ) );
 		this.c2d.fillStyle = 'rgb(0, 0, 0)';
 		this.c2d.fillText( formatNum( min, decimals ), 0, 0 );
 		this.restore();
 
 		// max label
 		this.save();
-		var deg = Math.PI * 17.5/8;
+		deg = Math.PI * 17.5/8;
 		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
 			this.radius * 0.65 * Math.cos( deg ) );
-		var fontSize = this.radius / 8;
+		fontSize = this.radius / 8;
 		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
-		var metrics = this.c2d.measureText( formatNum( max, decimals ) );
+		metrics = this.c2d.measureText( formatNum( max, decimals ) );
 		this.c2d.fillStyle = 'rgb(0, 0, 0)';
 		this.c2d.fillText( formatNum( max, decimals ), - metrics.width, 0 );
 		this.restore();
