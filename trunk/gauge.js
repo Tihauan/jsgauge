@@ -210,7 +210,8 @@ Gauge.prototype.draw = function() {
 	function normalize( settings ) {
 		var i,
                     span = settings.max - settings.min,
-                    spanPct = span/100;
+                    spanPct = span/100,
+		    normalized;
 
                 // Restrict pointer to range of values
                 if (settings.pointerValue > settings.max){
@@ -219,7 +220,7 @@ Gauge.prototype.draw = function() {
                     settings.pointerValue = settings.min;
                 }
 
-		return {
+		normalized = {
 			min: 0,
 			max: 100,
 			value: ( settings.value - settings.min ) / spanPct,
