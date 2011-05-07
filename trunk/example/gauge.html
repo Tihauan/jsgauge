@@ -18,9 +18,10 @@
 			<canvas id="test_medium" width="175" height="175"></canvas>
 			<canvas id="test_small" width="100" height="100"></canvas>
 		</div>
-		<div id="overflowTests">
+		<div id="otherTests">
 			<canvas id="test_overflow_min" width="250" height="250"></canvas>
 			<canvas id="test_overflow_max" width="250" height="250"></canvas>
+			<canvas id="test_random_update" width="250" height="250"></canvas>
 		</div>
 		<script type="text/javascript">
 
@@ -41,11 +42,13 @@
 			}
 
 			addLoadEvent( function() {
+				var options, gm, gms, testOverflowMin, testOverflowMax,periodicRand;
+
 				// Draw the gauge using default settings
 				new Gauge( document.getElementById( 'test_default' ) );
 
 				// Draw the gauge using custom settings
-				var options = {
+				options = {
 					value: 60,
 					label: 'Hello!',
 					min: 50,
@@ -62,7 +65,7 @@
 				new Gauge( document.getElementById( 'test_custom'), options );
 
 				// Draw the gauge using custom settings (medium)
-				var options = {
+				options = {
 					value: -60,
 					label: 'Hello!',
 					min: -100,
@@ -76,11 +79,11 @@
 					redFrom: 30,
 					redTo: 100
 				};
-				var gm = new Gauge( document.getElementById( 'test_medium'), options );
+				gm = new Gauge( document.getElementById( 'test_medium'), options );
 				gm.setValue( 80 );
 
 				// Draw the gauge using custom settings (small)
-				var options = {
+				options = {
 					value: 10,
 					label: 'Hello!',
 					min: 10,
@@ -94,16 +97,21 @@
 					redFrom: 10.7,
 					redTo: 11
 				};
-				var gms = new Gauge( document.getElementById( 'test_small'), options );
+				gms = new Gauge( document.getElementById( 'test_small'), options );
 				gms.setValue( 10.55 );
 
 				// Draw gauge and use overflow values (min)
-				var testOverflowMin = new Gauge( document.getElementById( 'test_overflow_min' ), {label: "overflow min"});
+				testOverflowMin = new Gauge( document.getElementById( 'test_overflow_min' ), {label: "overflow min"});
 				testOverflowMin.setValue(-10);
 
 				// Draw gauge and use overflow values (max)
-				var testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "overflow max"});
+				testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "overflow max"});
 				testOverflowMax.setValue(110);
+
+                                periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {label: "periodic"});
+                                setInterval(function() {
+				  periodicRand.setValue( Math.floor(Math.random()*100) );
+                                }, 2000); 
 			} );
 		</script>
 	</body>
