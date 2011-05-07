@@ -3,6 +3,8 @@ function Gauge( canvas, options ) {
 	var that = this;
 	this.canvas = canvas;
 	options = options || {};
+
+	// Gauge settings
 	this.settings = {
 		value: options.value || 0,
 		pointerValue: options.value || 0,
@@ -19,8 +21,15 @@ function Gauge( canvas, options ) {
 		redTo: [].concat(options.redTo || 0),
 	};
 
+	// Colors used to render the gauge
 	this.colors = {
+		text:    options.colorOfText || 'rgb(0, 0, 0)',
+		warningText:    options.colorOfWarningText || 'rgb(255, 0, 0)',
 		fill:    options.colorOfFill || [ '#111', '#ccc', '#ddd', '#eee' ],
+		pointerFill:    options.colorOfPointerFill || 'rgba(255, 100, 0, 0.7)',
+		pointerStroke:    options.colorOfPointerStroke || 'rgba(255, 100, 100, 0.9)',
+		centerCircleFill:    options.colorOfCenterCircleFill || 'rgba(0, 100, 255, 1)',
+		centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
 		redBand: options.colorOfRedBand || 'rgba(255, 0, 0, 0.2)',
 		yelBand: options.colorOfYellowBand || 'rgba(255, 215, 0, 0.2)',
 		grnBand: options.colorOfGreenBand || 'rgba(0, 255, 0, 0.2)',
@@ -130,18 +139,18 @@ function Gauge( canvas, options ) {
 		this.c2d.rotate( this.startDeg );
 		this.c2d.rotate( this.spanDeg * value / 100 );
 		this.c2d.lineWidth = this.radius * 0.015;
-		this.c2d.fillStyle = 'rgba(255, 100, 0, 0.7)';
+		this.c2d.fillStyle = that.colors.pointerFill;
 		pointer( this );
 		this.c2d.fill();
-		this.c2d.strokeStyle = 'rgba(255, 100, 100, 0.9)';
+		this.c2d.strokeStyle = that.colors.pointerStroke; 
 		pointer( this );
 		this.c2d.stroke();
 		// center circle
-		this.c2d.fillStyle = 'rgba(0, 100, 255, 1)';
+		this.c2d.fillStyle = that.colors.centerCircleFill;
 		this.c2d.beginPath();
 		this.c2d.arc( 0, 0, this.radius * 0.1, 0, Math.PI * 2, true );
 		this.c2d.fill();
-		this.c2d.strokeStyle = 'rgba(0, 0, 255, 1)';
+		this.c2d.strokeStyle = that.colors.centerCircleStroke;
 		this.c2d.beginPath();
 		this.c2d.arc( 0, 0, this.radius * 0.1, 0, Math.PI * 2, true );
 		this.c2d.stroke();
@@ -152,7 +161,7 @@ function Gauge( canvas, options ) {
 			var fontSize = this.radius / 5;
 			styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 			var metrics = measureText( this.c2d, label );
-			this.c2d.fillStyle = 'rgb(0, 0, 0)';
+			this.c2d.fillStyle = that.colors.text;
 			var px = - metrics/ 2;
 			var py = - this.radius * 0.4 + fontSize / 2;
 			fillText( this.c2d, label, px, py );
@@ -175,9 +184,9 @@ function Gauge( canvas, options ) {
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		metrics = measureText( this.c2d, formatNum( value, decimals ) );
 		if (value < min || value > max) { // Outside min/max ranges?
-			this.c2d.fillStyle = 'rgb(255, 0, 0)';
+			this.c2d.fillStyle = that.colors.warningText;
 		} else {
-			this.c2d.fillStyle = 'rgb(0, 0, 0)';
+			this.c2d.fillStyle = that.colors.text;
 		}
 		fillText( this.c2d, formatNum( value, decimals ), - metrics/ 2, this.radius * 0.72 );
 
@@ -188,7 +197,7 @@ function Gauge( canvas, options ) {
 			this.radius * 0.65 * Math.cos( deg ) );
 		fontSize = this.radius / 8;
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
-		this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		this.c2d.fillStyle = that.colors.text;
 		fillText( this.c2d, formatNum( min, decimals ), 0, 0 );
 		this.restore();
 
@@ -200,7 +209,7 @@ function Gauge( canvas, options ) {
 		fontSize = this.radius / 8;
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		metrics = measureText( this.c2d, formatNum( max, decimals ) );
-		this.c2d.fillStyle = 'rgb(0, 0, 0)';
+		this.c2d.fillStyle = that.colors.text;
 		fillText( this.c2d, formatNum( max, decimals ), - metrics, 0 );
 		this.restore();
 	};
