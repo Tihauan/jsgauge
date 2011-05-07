@@ -1,4 +1,4 @@
-/*jslint browser: true */
+﻿/*jslint browser: true */
 function Gauge( canvas, options ) {
 	var that = this;
 	this.canvas = canvas;
@@ -27,26 +27,36 @@ function Gauge( canvas, options ) {
 	};
 
 	// Private helper functions
+	function styleText( context, style ) {
+		context.font = style;
+		context.mozTextStyle = style; // FF3
+	}
+
 	function measureText(context, text) {
 		if (context.measureText) {
-			return context.measureText(text);
+			return context.measureText(text).width; //-->
 		} else if (context.mozMeasureText) { //FF < 3.5
-			return context.mozMeasureText(text);
+			return context.mozMeasureText(text); //-->
 		}
 		throw "measureText() not supported!";
 	}
 
 	function fillText(context, text, px, py) {
+		var width;
 		if (context.fillText) {
 			return context.fillText(text, px, py);
-		} else if (context.mozFillText) { //FF < 3.5
-			return context.mozFillText(text, px, py);
+		} else if (context.mozDrawText) { //FF < 3.5
+			context.save();
+			context.translate(px, py);
+			width = context.mozDrawText(text);
+			context.restore();
+			return width;
 		}
 		throw "fillText() not supported!";
 	}
 
 	this.drawBackground = function( ) {
-		var fill = that.colors.fill, 
+		var fill = that.colors.fill,
 			rad = [ this.radius, this.radius - 1, this.radius * 0.98, this.radius * 0.95 ],
 			i;
 
@@ -140,10 +150,10 @@ function Gauge( canvas, options ) {
 	this.drawCaption = function( label ) {
 		if ( label ) {
 			var fontSize = this.radius / 5;
-			this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+			styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 			var metrics = measureText( this.c2d, label );
 			this.c2d.fillStyle = 'rgb(0, 0, 0)';
-			var px = - metrics.width / 2;
+			var px = - metrics/ 2;
 			var py = - this.radius * 0.4 + fontSize / 2;
 			fillText( this.c2d, label, px, py );
 		}
@@ -162,14 +172,14 @@ function Gauge( canvas, options ) {
 
 		// value text
 		fontSize = this.radius / 5;
-		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		metrics = measureText( this.c2d, formatNum( value, decimals ) );
 		if (value < min || value > max) { // Outside min/max ranges?
 			this.c2d.fillStyle = 'rgb(255, 0, 0)';
 		} else {
 			this.c2d.fillStyle = 'rgb(0, 0, 0)';
 		}
-		fillText( this.c2d, formatNum( value, decimals ), - metrics.width / 2, this.radius * 0.72 );
+		fillText( this.c2d, formatNum( value, decimals ), - metrics/ 2, this.radius * 0.72 );
 
 		// min label
 		this.save();
@@ -177,8 +187,7 @@ function Gauge( canvas, options ) {
 		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
 			this.radius * 0.65 * Math.cos( deg ) );
 		fontSize = this.radius / 8;
-		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
-		metrics = measureText( this.c2d, formatNum( min, decimals ) );
+		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		this.c2d.fillStyle = 'rgb(0, 0, 0)';
 		fillText( this.c2d, formatNum( min, decimals ), 0, 0 );
 		this.restore();
@@ -189,10 +198,10 @@ function Gauge( canvas, options ) {
 		this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
 			this.radius * 0.65 * Math.cos( deg ) );
 		fontSize = this.radius / 8;
-		this.c2d.font = fontSize.toFixed(0) + 'px sans-serif';
+		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		metrics = measureText( this.c2d, formatNum( max, decimals ) );
 		this.c2d.fillStyle = 'rgb(0, 0, 0)';
-		fillText( this.c2d, formatNum( max, decimals ), - metrics.width, 0 );
+		fillText( this.c2d, formatNum( max, decimals ), - metrics, 0 );
 		this.restore();
 	};
 
@@ -273,7 +282,7 @@ Gauge.prototype.draw = function() {
 			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
 		};
 
-		for(i=settings.greenFrom.length;i--;) { 
+		for(i=settings.greenFrom.length;i--;) {
 			normalized.greenFrom[i] = (settings.greenFrom[i] - settings.min)/spanPct;
 		}
 		for(i=settings.greenTo.length;i--;) {
