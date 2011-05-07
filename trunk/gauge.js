@@ -1,5 +1,6 @@
 /*jslint browser: true */
 function Gauge( canvas, options ) {
+	var that = this;
 	this.canvas = canvas;
 	options = options || {};
 	this.settings = {
@@ -15,7 +16,14 @@ function Gauge( canvas, options ) {
 		yellowFrom: [].concat(options.yellowFrom || 0),
 		yellowTo: [].concat(options.yellowTo || 0),
 		redFrom: [].concat(options.redFrom || 0),
-		redTo: [].concat(options.redTo || 0)
+		redTo: [].concat(options.redTo || 0),
+	};
+
+	this.colors = {
+		fill:    options.colorOfFill || [ '#111', '#ccc', '#ddd', '#eee' ],
+		redBand: options.colorOfRedBand || 'rgba(255, 0, 0, 0.2)',
+		yelBand: options.colorOfYellowBand || 'rgba(255, 215, 0, 0.2)',
+		grnBand: options.colorOfGreenBand || 'rgba(0, 255, 0, 0.2)',
 	};
 
 	// Private helper functions
@@ -38,7 +46,7 @@ function Gauge( canvas, options ) {
 	}
 
 	this.drawBackground = function( ) {
-		var fill = [ '#111', '#ccc', '#ddd', '#eee' ],
+		var fill = that.colors.fill, 
 			rad = [ this.radius, this.radius - 1, this.radius * 0.98, this.radius * 0.95 ],
 			i;
 
@@ -328,13 +336,13 @@ Gauge.prototype.draw = function() {
 	drawCtx.clear();
 	drawCtx.call( this.drawBackground );
 	for(r=relSettings.redFrom.length;r--;) {
-		drawCtx.call( this.drawRange, relSettings.redFrom[r], relSettings.redTo[r], 'rgba(255, 0, 0, 0.2)');
+		drawCtx.call( this.drawRange, relSettings.redFrom[r], relSettings.redTo[r], this.colors.redBand);
 	}
 	for(g=relSettings.greenFrom.length;g--;) {
-		drawCtx.call( this.drawRange, relSettings.greenFrom[g], relSettings.greenTo[g], 'rgba(0, 255, 0, 0.2)' );
+		drawCtx.call( this.drawRange, relSettings.greenFrom[g], relSettings.greenTo[g], this.colors.grnBand );
 	}
 	for(y=relSettings.yellowFrom.length;y--;) {
-		drawCtx.call( this.drawRange, relSettings.yellowFrom[y], relSettings.yellowTo[y], 'rgba(255, 215, 0, 0.2)' );
+		drawCtx.call( this.drawRange, relSettings.yellowFrom[y], relSettings.yellowTo[y], this.colors.yelBand );
 	}
 	drawCtx.call( this.drawTicks, relSettings.majorTicks, relSettings.minorTicks );
 	drawCtx.call( this.drawPointer, relSettings.pointerValue );
