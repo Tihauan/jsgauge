@@ -101,14 +101,14 @@
 				gms.setValue( 10.55 );
 
 				// Draw gauge and use overflow values (min)
-				testOverflowMin = new Gauge( document.getElementById( 'test_overflow_min' ), {label: "overflow min"});
+				testOverflowMin = new Gauge( document.getElementById( 'test_overflow_min' ), {label: "Overflow min"});
 				testOverflowMin.setValue(-10);
 
 				// Draw gauge and use overflow values (max)
-				testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "overflow max"});
+				testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "Overflow max"});
 				testOverflowMax.setValue(110);
 
-                                periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {label: "periodic"});
+                                periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {label: "Updates"});
                                 setInterval(function() {
 				  periodicRand.setValue( Math.floor(Math.random()*100) );
                                 }, 2000); 
