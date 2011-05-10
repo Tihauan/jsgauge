@@ -246,7 +246,7 @@ Gauge.prototype.setValue = function( value ) {
 		that.draw();
 	}
 
-	if ( this.settings.value !== value ) {
+	if ( !isNaN(value) && this.settings.value !== value ) {
 		this.settings.value = value;
 		timer = setInterval( adjustValue, 40 );
 	}
