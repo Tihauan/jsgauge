@@ -1,5 +1,10 @@
 /**
- * jQuery wrapper for jsgauge
+ * jsgauge v0.4 - A jQuery plugin wrapper for jsgauge
+ *
+ * http://code.google.com/p/jsgauge/
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
  *
  * To use this, you need to include gauge.js, jquery, and this file:
  *
