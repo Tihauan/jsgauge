@@ -39,9 +39,9 @@ function Gauge( canvas, options ) {
 		pointerStroke:    options.colorOfPointerStroke || 'rgba(255, 100, 100, 0.9)',
 		centerCircleFill:    options.colorOfCenterCircleFill || 'rgba(0, 100, 255, 1)',
 		centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
-		redBand: options.colorOfRedBand || 'rgba(255, 0, 0, 0.2)',
-		yelBand: options.colorOfYellowBand || 'rgba(255, 215, 0, 0.2)',
-		grnBand: options.colorOfGreenBand || 'rgba(0, 255, 0, 0.2)',
+		redBand: options.colorOfRedBand || options.redColor || 'rgba(255, 0, 0, 0.2)',
+		yelBand: options.colorOfYellowBand || options.yellowColor || 'rgba(255, 215, 0, 0.2)',
+		grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)',
 	};
 
 	// Private helper functions
