@@ -27,7 +27,7 @@ function Gauge( canvas, options ) {
 		yellowFrom: [].concat(options.yellowFrom || 0),
 		yellowTo: [].concat(options.yellowTo || 0),
 		redFrom: [].concat(options.redFrom || 0),
-		redTo: [].concat(options.redTo || 0),
+		redTo: [].concat(options.redTo || 0)
 	};
 
 	// Colors used to render the gauge
@@ -41,7 +41,7 @@ function Gauge( canvas, options ) {
 		centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
 		redBand: options.colorOfRedBand || options.redColor || 'rgba(255, 0, 0, 0.2)',
 		yelBand: options.colorOfYellowBand || options.yellowColor || 'rgba(255, 215, 0, 0.2)',
-		grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)',
+		grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)'
 	};
 
 	// Private helper functions
