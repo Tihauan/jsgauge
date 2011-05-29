@@ -1,0 +1,10 @@
+PROJECT_NAME: jsgauge
+VERSION: "0.4"
+COPYRIGHT_NOTICE: |
+      /*
+       * #{PROJECT_NAME} #{VERSION}
+       * http://code.google.com/p/jsgauge/
+       *
+       * Licensed under the MIT license:
+       * http://www.opensource.org/licenses/mit-license.php
+       */
