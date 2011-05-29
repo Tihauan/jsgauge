@@ -21,6 +21,64 @@ function Gauge( canvas, options ) {
 		redTo: [].concat(options.redTo || 0)
 	};
 
+	// settings normalized to a [0, 100] interval
+	function normalize( settings ) {
+		var i,
+		span = settings.max - settings.min,
+		spanPct = span/100,
+		normalized;
+
+		// Restrict pointer to range of values
+		if (settings.pointerValue > settings.max){
+			settings.pointerValue = settings.max;
+		} else if(settings.pointerValue < settings.min){
+			settings.pointerValue = settings.min;
+		}
+
+		normalized = {
+			min: 0,
+			max: 100,
+			value: ( settings.value - settings.min ) / spanPct,
+			pointerValue: ( settings.pointerValue - settings.min ) / spanPct,
+			label: settings.label || '',
+			greenFrom: [],
+			greenTo: [],
+			yellowFrom: [],
+			yellowTo: [],
+			redFrom: [],
+			redTo: [],
+			// also fix some possible invalid settings
+			majorTicks: Math.max( 2, settings.majorTicks ),
+			minorTicks: Math.max( 0, settings.minorTicks ),
+			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
+		};
+
+		for(i=settings.greenFrom.length;i--;) {
+			normalized.greenFrom[i] = (settings.greenFrom[i] - settings.min)/spanPct;
+		}
+		for(i=settings.greenTo.length;i--;) {
+			normalized.greenTo[i] = (settings.greenTo[i] - settings.min)/spanPct;
+		}
+		for(i=settings.yellowFrom.length;i--;) {
+			normalized.yellowFrom[i] = (settings.yellowFrom[i] - settings.min)/spanPct;
+		}
+		for(i=settings.yellowTo.length;i--;) {
+			normalized.yellowTo[i] = (settings.yellowTo[i] - settings.min)/spanPct;
+		}
+		for(i=settings.redFrom.length;i--;) {
+			normalized.redFrom[i] = (settings.redFrom[i] - settings.min)/spanPct;
+		}
+		for(i=settings.redTo.length;i--;) {
+			normalized.redTo[i] = (settings.redTo[i] - settings.min)/spanPct;
+		}
+
+		return normalized;
+	}
+
+	// draw context contains a set of values useful for
+	// most drawing operations.
+	this.relSettings = normalize( this.settings );
+
 	// Colors used to render the gauge
 	this.colors = {
 		text:    options.colorOfText || 'rgb(0, 0, 0)',
@@ -66,8 +124,8 @@ function Gauge( canvas, options ) {
 
 	this.drawBackground = function( ) {
 		var fill = that.colors.fill,
-			rad = [ this.radius, this.radius - 1, this.radius * 0.98, this.radius * 0.95 ],
-			i;
+		rad = [ this.radius, this.radius - 1, this.radius * 0.98, this.radius * 0.95 ],
+		i;
 
 		this.c2d.rotate( this.startDeg );
 		for ( i = 0; i < fill.length; i++ ) {
@@ -98,7 +156,7 @@ function Gauge( canvas, options ) {
 
 	this.drawTicks = function( majorTicks, minorTicks ) {
 		var majorSpan,
-			i, j;
+		i, j;
 		// major ticks
 		this.c2d.rotate( this.startDeg );
 		this.c2d.lineWidth = this.radius * 0.025;
@@ -219,151 +277,98 @@ function Gauge( canvas, options ) {
 	return this;
 }
 
-Gauge.prototype.setValue = function( value ) {
-	var timer = null;
-	var that = this;
-	var pointerValue = (value > that.settings.max) ?
-	that.settings.max :  // Nomalize to max value
-	(value < that.settings.min) ?
-	that.settings.min :  // Nomalize to min value
-	value;
-	var increment = Math.abs( that.settings.pointerValue - pointerValue ) / 25;
+	Gauge.prototype.setValue = function( value ) {
+		var that = this,
+		pointerValue = (value > that.settings.max) ?
+		that.settings.max :  // Nomalize to max value
+		(value < that.settings.min) ?
+		that.settings.min :  // Nomalize to min value
+		value,
+		increment = Math.abs( that.settings.pointerValue - pointerValue ) / 25;
 
-	function adjustValue() {
-		if ( that.settings.pointerValue < pointerValue ) {
-			that.settings.pointerValue += increment;
-			if ( that.settings.pointerValue + increment >= pointerValue ) {
-				that.settings.pointerValue = pointerValue;
-				clearInterval( timer );
+		function adjustValue() {
+			var span;
+			if ( that.settings.pointerValue < pointerValue ) {
+				that.settings.pointerValue += increment;
+				if ( that.settings.pointerValue + increment >= pointerValue ) {
+					that.settings.pointerValue = pointerValue;
+				}
+			} else {
+				that.settings.pointerValue -= increment;
+				if ( that.settings.pointerValue - increment <= pointerValue ) {
+					that.settings.pointerValue = pointerValue;
+				}
 			}
-		} else {
-			that.settings.pointerValue -= increment;
-			if ( that.settings.pointerValue - increment <= pointerValue ) {
-				that.settings.pointerValue = pointerValue;
-				clearInterval( timer );
+			span = that.settings.max - that.settings.min;
+			that.relSettings.pointerValue = (that.settings.pointerValue -
+			that.settings.min) / (span / 100);
+			that.draw();
+			if (that.settings.pointerValue != pointerValue) {
+				setTimeout(adjustValue, 50); // Draw another frame
 			}
 		}
-		that.draw();
-	}
 
-	if ( !isNaN(value) && this.settings.value !== value ) {
-		this.settings.value = value;
-		timer = setInterval( adjustValue, 40 );
-	}
-};
-
-Gauge.prototype.draw = function() {
-	var r, g, y;
-
-	if ( ! this.canvas.getContext ) {
-		return; //-->
-	}
-
-	// settings normalized to a [0, 100] interval
-	function normalize( settings ) {
-		var i,
-		span = settings.max - settings.min,
-		spanPct = span/100,
-		normalized;
-
-		// Restrict pointer to range of values
-		if (settings.pointerValue > settings.max){
-			settings.pointerValue = settings.max;
-		} else if(settings.pointerValue < settings.min){
-			settings.pointerValue = settings.min;
-		}
-
-		normalized = {
-			min: 0,
-			max: 100,
-			value: ( settings.value - settings.min ) / spanPct,
-			pointerValue: ( settings.pointerValue - settings.min ) / spanPct,
-			label: settings.label || '',
-			greenFrom: [],
-			greenTo: [],
-			yellowFrom: [],
-			yellowTo: [],
-			redFrom: [],
-			redTo: [],
-			// also fix some possible invalid settings
-			majorTicks: Math.max( 2, settings.majorTicks ),
-			minorTicks: Math.max( 0, settings.minorTicks ),
-			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
-		};
-
-		for(i=settings.greenFrom.length;i--;) {
-			normalized.greenFrom[i] = (settings.greenFrom[i] - settings.min)/spanPct;
-		}
-		for(i=settings.greenTo.length;i--;) {
-			normalized.greenTo[i] = (settings.greenTo[i] - settings.min)/spanPct;
-		}
-		for(i=settings.yellowFrom.length;i--;) {
-			normalized.yellowFrom[i] = (settings.yellowFrom[i] - settings.min)/spanPct;
-		}
-		for(i=settings.yellowTo.length;i--;) {
-			normalized.yellowTo[i] = (settings.yellowTo[i] - settings.min)/spanPct;
-		}
-		for(i=settings.redFrom.length;i--;) {
-			normalized.redFrom[i] = (settings.redFrom[i] - settings.min)/spanPct;
-		}
-		for(i=settings.redTo.length;i--;) {
-			normalized.redTo[i] = (settings.redTo[i] - settings.min)/spanPct;
-		}
-
-		return normalized;
-	}
-
-	// draw context contains a set of values useful for
-	// most drawing operations.
-	var relSettings = normalize( this.settings );
-	var drawCtx = {
-		c2d: this.canvas.getContext( '2d' ),
-		startDeg: Math.PI * 5.5 / 8,
-		spanDeg: Math.PI * 13 / 8,
-		save: function() {
-			this.c2d.save();
-		},
-		restore: function() {
-			this.c2d.restore();
-		},
-		call: function( fn ) {
-			var args = Array.prototype.slice.call( arguments );
-			this.save();
-			this.translateCenter();
-			fn.apply( this, args.slice( 1 ) );
-			this.restore();
-		},
-		clear: function() {
-			this.c2d.clearRect( 0, 0, this.width, this.height );
-		},
-		translateCenter: function() {
-			this.c2d.translate( this.centerX, this.centerY );
+		if ( !isNaN(value) && this.settings.value !== value ) {
+			this.settings.value = value;
+			adjustValue();
 		}
 	};
 
-	drawCtx.width = drawCtx.c2d.canvas.width;
-	drawCtx.height = drawCtx.c2d.canvas.height;
-	drawCtx.radius = Math.min( drawCtx.width / 2 - 4, drawCtx.height / 2 - 4 );
-	drawCtx.innerRadius = drawCtx.radius * 0.7;
-	drawCtx.outerRadius = drawCtx.radius * 0.9;
-	drawCtx.centerX = drawCtx.radius + 4;
-	drawCtx.centerY = drawCtx.radius + 4 + ( drawCtx.radius -
-		drawCtx.radius * Math.sin( drawCtx.startDeg ) ) / 2;
+	Gauge.prototype.draw = function() {
+		var r, g, y;
 
-	// draw everything
-	drawCtx.clear();
-	drawCtx.call( this.drawBackground );
-	for(r=relSettings.redFrom.length;r--;) {
-		drawCtx.call( this.drawRange, relSettings.redFrom[r], relSettings.redTo[r], this.colors.redBand);
-	}
-	for(g=relSettings.greenFrom.length;g--;) {
-		drawCtx.call( this.drawRange, relSettings.greenFrom[g], relSettings.greenTo[g], this.colors.grnBand );
-	}
-	for(y=relSettings.yellowFrom.length;y--;) {
-		drawCtx.call( this.drawRange, relSettings.yellowFrom[y], relSettings.yellowTo[y], this.colors.yelBand );
-	}
-	drawCtx.call( this.drawTicks, relSettings.majorTicks, relSettings.minorTicks );
-	drawCtx.call( this.drawPointer, relSettings.pointerValue );
-	drawCtx.call( this.drawCaption, relSettings.label );
-	drawCtx.call( this.drawValues, this.settings.min, this.settings.max, this.settings.value, relSettings.decimals );
-};
+		if ( ! this.canvas.getContext ) {
+			return; //-->
+		}
+
+		var drawCtx = {
+			c2d: this.canvas.getContext( '2d' ),
+			startDeg: Math.PI * 5.5 / 8,
+			spanDeg: Math.PI * 13 / 8,
+			save: function() {
+				this.c2d.save();
+			},
+			restore: function() {
+				this.c2d.restore();
+			},
+			call: function( fn ) {
+				var args = Array.prototype.slice.call( arguments );
+				this.save();
+				this.translateCenter();
+				fn.apply( this, args.slice( 1 ) );
+				this.restore();
+			},
+			clear: function() {
+				this.c2d.clearRect( 0, 0, this.width, this.height );
+			},
+			translateCenter: function() {
+				this.c2d.translate( this.centerX, this.centerY );
+			}
+		};
+
+		drawCtx.width = drawCtx.c2d.canvas.width;
+		drawCtx.height = drawCtx.c2d.canvas.height;
+		drawCtx.radius = Math.min( drawCtx.width / 2 - 4, drawCtx.height / 2 - 4 );
+		drawCtx.innerRadius = drawCtx.radius * 0.7;
+		drawCtx.outerRadius = drawCtx.radius * 0.9;
+		drawCtx.centerX = drawCtx.radius + 4;
+		drawCtx.centerY = drawCtx.radius + 4 + ( drawCtx.radius -
+			drawCtx.radius * Math.sin( drawCtx.startDeg ) ) / 2;
+
+		// draw everything
+		drawCtx.clear();
+		drawCtx.call( this.drawBackground );
+		for(r=this.relSettings.redFrom.length;r--;) {
+			drawCtx.call( this.drawRange, this.relSettings.redFrom[r], this.relSettings.redTo[r], this.colors.redBand);
+		}
+		for(g=this.relSettings.greenFrom.length;g--;) {
+			drawCtx.call( this.drawRange, this.relSettings.greenFrom[g], this.relSettings.greenTo[g], this.colors.grnBand );
+		}
+		for(y=this.relSettings.yellowFrom.length;y--;) {
+			drawCtx.call( this.drawRange, this.relSettings.yellowFrom[y], this.relSettings.yellowTo[y], this.colors.yelBand );
+		}
+		drawCtx.call( this.drawTicks, this.relSettings.majorTicks, this.relSettings.minorTicks );
+		drawCtx.call( this.drawPointer, this.relSettings.pointerValue );
+		drawCtx.call( this.drawCaption, this.relSettings.label );
+		drawCtx.call( this.drawValues, this.settings.min, this.settings.max, this.settings.value, this.relSettings.decimals );
+	};
