@@ -284,7 +284,7 @@ function Gauge( canvas, options ) {
 		(value < that.settings.min) ?
 		that.settings.min :  // Nomalize to min value
 		value,
-		increment = Math.abs( that.settings.pointerValue - pointerValue ) / 25;
+		increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
 
 		function adjustValue() {
 			var span;
