@@ -74,10 +74,13 @@
 					minorTicks: 3, // small ticks inside each major tick
 					greenFrom: -10,
 					greenTo: 10,
+					greenColor: '#00FF00', // full green
 					yellowFrom: 10,
 					yellowTo: 30,
+					yellowColor: '#FFFF00', // full yellow
 					redFrom: 30,
-					redTo: 100
+					redTo: 100,
+					redColor:  '#FF0000' // full red
 				};
 				gm = new Gauge( document.getElementById( 'test_medium'), options );
 				gm.setValue( 80 );
