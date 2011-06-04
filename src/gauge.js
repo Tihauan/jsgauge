@@ -9,6 +9,7 @@ function Gauge( canvas, options ) {
 		value: options.value || 0,
 		pointerValue: options.value || 0,
 		label: options.label || '',
+		unitsLabel: options.unitsLabel || '',
 		min: options.min || 0,
 		max: options.max || 100,
 		majorTicks: options.majorTicks || 5,
@@ -227,7 +228,7 @@ function Gauge( canvas, options ) {
 	};
 
 	this.drawValues = function( min, max, value, decimals ) {
-		var deg, fontSize, metrics;
+		var deg, fontSize, metrics, valueText;
 		function formatNum( value, decimals ) {
 			var ret = value.toFixed( decimals );
 			while ( ( decimals > 0 ) && ret.match( /^\d+\.(\d+)?0$/ ) ) {
@@ -238,15 +239,16 @@ function Gauge( canvas, options ) {
 		}
 
 		// value text
+        valueText = formatNum( value, decimals ) + that.settings.unitsLabel;
 		fontSize = this.radius / 5;
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
-		metrics = measureText( this.c2d, formatNum( value, decimals ) );
+		metrics = measureText( this.c2d, valueText );
 		if (value < min || value > max) { // Outside min/max ranges?
 			this.c2d.fillStyle = that.colors.warningText;
 		} else {
 			this.c2d.fillStyle = that.colors.text;
 		}
-		fillText( this.c2d, formatNum( value, decimals ), - metrics/ 2, this.radius * 0.72 );
+		fillText( this.c2d, valueText, - metrics/ 2, this.radius * 0.72 );
 
 		// min label
 		this.save();
