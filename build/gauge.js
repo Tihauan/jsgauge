@@ -1,4 +1,10 @@
-/*jslint browser: true */
+/*
+ * Jsgauge 0.4
+ * http://code.google.com/p/jsgauge/
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/mit-license.php
+ *//*jslint browser: true */
 function Gauge( canvas, options ) {
 	var that = this;
 	this.canvas = canvas;
