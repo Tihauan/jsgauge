@@ -372,5 +372,9 @@ function Gauge( canvas, options ) {
 		drawCtx.call( this.drawTicks, this.relSettings.majorTicks, this.relSettings.minorTicks );
 		drawCtx.call( this.drawPointer, this.relSettings.pointerValue );
 		drawCtx.call( this.drawCaption, this.relSettings.label );
-		drawCtx.call( this.drawValues, this.settings.min, this.settings.max, this.settings.value, this.relSettings.decimals );
+		drawCtx.call( this.drawValues, 
+			this.settings.min,
+			this.settings.max,
+			this.settings.value,
+			this.relSettings.decimals );
 	};
