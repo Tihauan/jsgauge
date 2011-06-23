@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Gauge demo</title>
@@ -19,9 +19,10 @@
 			<canvas id="test_small" width="100" height="100"></canvas>
 		</div>
 		<div id="otherTests">
-			<canvas id="test_overflow_min" width="250" height="250"></canvas>
-			<canvas id="test_overflow_max" width="250" height="250"></canvas>
-			<canvas id="test_random_update" width="250" height="250"></canvas>
+			<canvas id="test_overflow_min" width="200" height="200"></canvas>
+			<canvas id="test_overflow_max" width="200" height="200"></canvas>
+			<canvas id="test_random_update" width="200" height="200"></canvas>
+			<canvas id="test_custom_bands" width="200" height="200"></canvas>
 		</div>
 		<script type="text/javascript">
 
@@ -113,10 +114,25 @@
 				testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "Overflow max"});
 				testOverflowMax.setValue(110);
 
-                                periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {label: "Updates"});
-                                setInterval(function() {
-				  periodicRand.setValue( Math.floor(Math.random()*100) );
-                                }, 3000);
+				periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {label: "Updates"});
+				setInterval(function() {
+					periodicRand.setValue( Math.floor(Math.random()*100) );
+				}, 3000);
+
+				// Draw gauge and use custom bands
+				testCustomBands = new Gauge( document.getElementById( 'test_custom_bands' ),
+				{
+					label: "Custom bands",
+					bands: [
+						{ color: '#ccc', from: 0, to: 10 },
+						{ color: '#bbb', from: 10, to: 20 },
+						{ color: '#aaa', from: 20, to: 30 },
+						{ color: '#999', from: 30, to: 40 },
+						{ color: '#888', from: 40, to: 50 },
+						{ color: '#777', from: 50, to: 60 },
+						{ color: '#666', from: 60, to: 70 }
+					]
+				});
 			} );
 		</script>
 	</body>

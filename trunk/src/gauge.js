@@ -14,12 +14,16 @@ function Gauge( canvas, options ) {
 		max: options.max || 100,
 		majorTicks: options.majorTicks || 5,
 		minorTicks: options.minorTicks || 2, // small ticks inside each major tick
+
+		// START - Deprecated
 		greenFrom: [].concat(options.greenFrom || 0),
 		greenTo: [].concat(options.greenTo || 0),
 		yellowFrom: [].concat(options.yellowFrom || 0),
 		yellowTo: [].concat(options.yellowTo || 0),
 		redFrom: [].concat(options.redFrom || 0),
-		redTo: [].concat(options.redTo || 0)
+		redTo: [].concat(options.redTo || 0),
+		bands: [].concat(options.bands || [])
+		// END - Deprecated
 	};
 
 	// settings normalized to a [0, 100] interval
@@ -48,37 +52,25 @@ function Gauge( canvas, options ) {
 			yellowTo: [],
 			redFrom: [],
 			redTo: [],
+			bands: [],
 			// also fix some possible invalid settings
 			majorTicks: Math.max( 2, settings.majorTicks ),
 			minorTicks: Math.max( 0, settings.minorTicks ),
 			decimals: Math.max( 0, 3 - ( settings.max - settings.min ).toFixed( 0 ).length )
 		};
 
-		for(i=settings.greenFrom.length;i--;) {
-			normalized.greenFrom[i] = (settings.greenFrom[i] - settings.min)/spanPct;
-		}
-		for(i=settings.greenTo.length;i--;) {
-			normalized.greenTo[i] = (settings.greenTo[i] - settings.min)/spanPct;
-		}
-		for(i=settings.yellowFrom.length;i--;) {
-			normalized.yellowFrom[i] = (settings.yellowFrom[i] - settings.min)/spanPct;
-		}
-		for(i=settings.yellowTo.length;i--;) {
-			normalized.yellowTo[i] = (settings.yellowTo[i] - settings.min)/spanPct;
-		}
-		for(i=settings.redFrom.length;i--;) {
-			normalized.redFrom[i] = (settings.redFrom[i] - settings.min)/spanPct;
-		}
-		for(i=settings.redTo.length;i--;) {
-			normalized.redTo[i] = (settings.redTo[i] - settings.min)/spanPct;
+		for(i=settings.bands.length;i--;) {
+			var band = settings.bands[i];
+			normalized.bands[i] = {
+				color: band.color,
+				from: (band.from - settings.min)/spanPct,
+				to: (band.to - settings.min)/spanPct
+			}
 		}
 
 		return normalized;
 	}
 
-	// draw context contains a set of values useful for
-	// most drawing operations.
-	this.relSettings = normalize( this.settings );
 
 	// Colors used to render the gauge
 	this.colors = {
@@ -93,6 +85,33 @@ function Gauge( canvas, options ) {
 		yelBand: options.colorOfYellowBand || options.yellowColor || 'rgba(255, 215, 0, 0.2)',
 		grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)'
 	};
+
+	// Add colors to the bands object
+	for(var i=this.settings.redFrom.length; i--;){
+		this.settings.bands.push({ // Red
+			color: this.colors.redBand,
+			from: this.settings.redFrom[i],
+			to: this.settings.redTo[i]
+		});
+	}
+	for(i=this.settings.yellowFrom.length; i--;){
+		this.settings.bands.push({ // Yellow
+			color: this.colors.yelBand,
+			from: this.settings.yellowFrom[i],
+			to: this.settings.yellowTo[i]
+		});
+	}
+	for(i=this.settings.greenFrom.length; i--;){
+		this.settings.bands.push({ // Green
+			color: this.colors.grnBand,
+			from: this.settings.greenFrom[i],
+			to: this.settings.greenTo[i]
+		});
+	}
+
+	// draw context contains a set of values useful for
+	// most drawing operations.
+	this.relSettings = normalize( this.settings );
 
 	// Private helper functions
 	function styleText( context, style ) {
@@ -360,14 +379,10 @@ function Gauge( canvas, options ) {
 		// draw everything
 		drawCtx.clear();
 		drawCtx.call( this.drawBackground );
-		for(r=this.relSettings.redFrom.length;r--;) {
-			drawCtx.call( this.drawRange, this.relSettings.redFrom[r], this.relSettings.redTo[r], this.colors.redBand);
-		}
-		for(g=this.relSettings.greenFrom.length;g--;) {
-			drawCtx.call( this.drawRange, this.relSettings.greenFrom[g], this.relSettings.greenTo[g], this.colors.grnBand );
-		}
-		for(y=this.relSettings.yellowFrom.length;y--;) {
-			drawCtx.call( this.drawRange, this.relSettings.yellowFrom[y], this.relSettings.yellowTo[y], this.colors.yelBand );
+		for(var i = this.relSettings.bands.length; i--;) {
+			var band = this.relSettings.bands[i];
+			drawCtx.call(this.drawRange, band.from, band.to, band.color);
+
 		}
 		drawCtx.call( this.drawTicks, this.relSettings.majorTicks, this.relSettings.minorTicks );
 		drawCtx.call( this.drawPointer, this.relSettings.pointerValue );
