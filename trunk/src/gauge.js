@@ -65,7 +65,7 @@ function Gauge( canvas, options ) {
 				color: band.color,
 				from: (band.from - settings.min)/spanPct,
 				to: (band.to - settings.min)/spanPct
-			}
+			};
 		}
 
 		return normalized;
