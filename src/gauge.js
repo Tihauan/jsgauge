@@ -14,6 +14,7 @@ function Gauge( canvas, options ) {
 		max: options.max || 100,
 		majorTicks: options.majorTicks || 5,
 		minorTicks: options.minorTicks || 2, // small ticks inside each major tick
+		bands: [].concat(options.bands || []),
 
 		// START - Deprecated
 		greenFrom: [].concat(options.greenFrom || 0),
@@ -21,8 +22,7 @@ function Gauge( canvas, options ) {
 		yellowFrom: [].concat(options.yellowFrom || 0),
 		yellowTo: [].concat(options.yellowTo || 0),
 		redFrom: [].concat(options.redFrom || 0),
-		redTo: [].concat(options.redTo || 0),
-		bands: [].concat(options.bands || [])
+		redTo: [].concat(options.redTo || 0)
 		// END - Deprecated
 	};
 
@@ -81,9 +81,12 @@ function Gauge( canvas, options ) {
 		pointerStroke:    options.colorOfPointerStroke || 'rgba(255, 100, 100, 0.9)',
 		centerCircleFill:    options.colorOfCenterCircleFill || 'rgba(0, 100, 255, 1)',
 		centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
+
+		// START - Deprecated
 		redBand: options.colorOfRedBand || options.redColor || 'rgba(255, 0, 0, 0.2)',
 		yelBand: options.colorOfYellowBand || options.yellowColor || 'rgba(255, 215, 0, 0.2)',
 		grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)'
+		// END - Deprecated
 	};
 
 	// Add colors to the bands object
