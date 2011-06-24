@@ -1,3 +1,10 @@
+/*
+ * Jsgauge 0.4.1
+ * http://code.google.com/p/jsgauge/
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/mit-license.php
+ */
 /**
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
