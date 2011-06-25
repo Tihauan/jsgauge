@@ -1,0 +1,166 @@
+#summary API Documentation
+
+= Introduction =
+
+This page describes the jsgauge API.
+
+
+= Methods =
+
+{{{
+Gauge( canvas, options )
+}}}
+
+Gauge constructor, call this using `new` to create an instance of the gauge.
+
+To create a gauge, you need a reference to a `canvas` tag that you would like to use for the gauge. For example: 
+
+`<canvas id="test_default" width="250" height="250"></canvas>`
+
+Arguments:
+
+  * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
+  * options - Options object; see options section below for details.
+
+{{{
+setValue ( value ) 
+}}}
+
+Changes the value displayed on a gauge.
+
+{{{
+draw ()
+}}}
+
+Redraws the gauge.
+
+= Options =
+
+{{{
+value
+}}}
+
+Value to display on the gauge using both the text label at the bottom of the gauge and the needle.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+label
+}}}
+
+Text label to display at the top of the gauge.
+
+Type: `String`
+
+Default: `''`
+
+{{{
+unitsLabel
+}}}
+
+Text to display after the gauge value to indicate the type of units. For example, when displaying a temperature value you might include a degree symbol:
+
+`unitsLabel: '' + String.fromCharCode(186)`
+
+Type: `String`
+
+Default: `''`
+
+{{{
+min
+}}}
+
+Minimum value to display on the gauge; indicated by a small text label on the left-hand side of the gauge.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+max
+}}}
+
+Maximum value to display on the gauge; indicated by a small text label on the right-hand side of the gauge.
+
+Type: `Number`
+
+Default: `100`
+
+{{{
+majorTicks
+}}}
+
+Number of "large" ticks around the inner rim of the gauge.
+
+Type: `Number`
+
+Default: `5`
+
+{{{
+minorTicks
+}}}
+
+Number of small ticks between each pair of major ticks.
+
+Type: `Number`
+
+Default: `2`
+
+{{{
+bands
+}}}
+
+Array of objects used to define colored bands along the inner rim of the gauge. Each object contains the following members:
+
+  * color - Color of the band
+  * from - Value that the band starts at
+  * to - Value that the band ends at
+
+For example:
+
+`bands: [{ color: '#ccc', from: 0, to: 10 }]`
+
+Type: `Array`
+
+Default: `[]`
+
+                // START - Deprecated
+                greenFrom: [].concat(options.greenFrom || 0),
+                greenTo: [].concat(options.greenTo || 0),
+                yellowFrom: [].concat(options.yellowFrom || 0),
+                yellowTo: [].concat(options.yellowTo || 0),
+                redFrom: [].concat(options.redFrom || 0),
+                redTo: [].concat(options.redTo || 0)
+                // END - Deprecated
+
+
+
+                text:    options.colorOfText || 'rgb(0, 0, 0)',
+
+
+                warningText:    options.colorOfWarningText || 'rgb(255, 0, 0)',
+
+
+                fill:    options.colorOfFill || [ '#111', '#ccc', '#ddd', '#eee' ],
+
+
+                pointerFill:    options.colorOfPointerFill || 'rgba(255, 100, 0, 0.7)',
+
+
+                pointerStroke:    options.colorOfPointerStroke || 'rgba(255, 100, 100, 0.9)',
+
+
+                centerCircleFill:    options.colorOfCenterCircleFill || 'rgba(0, 100, 255, 1)',
+
+
+                centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
+
+
+
+                // START - Deprecated
+                redBand: options.colorOfRedBand || options.redColor || 'rgba(255, 0, 0, 0.2)',
+                yelBand: options.colorOfYellowBand || options.yellowColor || 'rgba(255, 215, 0, 0.2)',
+                grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)'
+                // END - Deprecated
