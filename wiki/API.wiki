@@ -7,9 +7,11 @@ This page describes the API for the pure JavaScript `Gauge` component.
 
 = Methods =
 
-{{{
-Gauge( canvas, options )
-}}}
+  * [API#Gauge(_canvas,_options_) Gauge]
+  * [API#setValue_(_value_) setValue]
+  * [API#draw_() draw]
+
+== Gauge( canvas, options ) ==
 
 Gauge constructor, call this using `new` to create an instance of the gauge.
 
@@ -22,15 +24,11 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
   * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
   * options - Object of optional parameters; see [API#Options options] section below for details.
 
-{{{
-setValue ( value ) 
-}}}
+== setValue ( value ) ==
 
 Changes the value displayed on a gauge.
 
-{{{
-draw ()
-}}}
+== draw () ==
 
 Redraws the gauge.
 
