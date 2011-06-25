@@ -20,7 +20,7 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
 *Arguments*:
 
   * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
-  * options - Options object; see options section below for details.
+  * options - Object of optional parameters; see [API#Options] section below for details.
 
 {{{
 setValue ( value ) 
