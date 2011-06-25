@@ -11,6 +11,8 @@ This page describes the API for the pure JavaScript `Gauge` component.
   * [API#setValue_(_value_) setValue]
   * [API#draw_() draw]
 
+<hr />
+
 == Gauge( canvas, options ) ==
 
 Gauge constructor, call this using `new` to create an instance of the gauge.
