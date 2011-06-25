@@ -1,0 +1,57 @@
+#summary API Documentation for the gauge jQuery plugin
+
+= Introduction =
+
+This page describes the jQuery API provided by jsgauge. Note that in order to use this API you need to include both `gauge.js` and `jquery.gauge.js` - or their minified versions.
+
+The plugin creates a new jQuery function called `gauge`.
+
+= Methods =
+
+  * [jQueryAPI#init init]
+  * [jQueryAPI#setValue setValue]
+  * [jQueryAPI#draw draw]
+
+<hr />
+
+== init ==
+
+Creates a new gauge control. The jQuery selector should point to a canvas tag:
+
+{{{
+jQuery("#test_overflow_max").gauge('init', options);
+}}}
+
+See [API#options] for more information on available options.
+
+Note that a gauge may also be initialized by calling the `gauge` function without any arguments:
+
+{{{
+jQuery("#test_overflow_min").gauge();
+}}}
+
+<hr />
+
+== setValue ==
+
+Changes the value displayed on the gauge:
+
+{{{
+jQuery("#test_overflow_max").gauge('setValue', 115); 
+}}}
+
+<hr />
+
+== draw ==
+
+Redraws the gauge:
+
+{{{
+jQuery("#test_overflow_max").gauge('draw'); 
+}}}
+
+<hr />
+
+= Options =
+
+See [API#options].
