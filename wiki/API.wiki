@@ -20,7 +20,7 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
 *Arguments*:
 
   * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
-  * options - Object of optional parameters; see [API#Options] section below for details.
+  * options - Object of optional parameters; see [API#Options options] section below for details.
 
 {{{
 setValue ( value ) 
@@ -52,9 +52,9 @@ label
 
 Text label to display at the top of the gauge.
 
-Type: `String`
+*Type*: `String`
 
-Default: `''`
+*Default*: `''`
 
 {{{
 unitsLabel
@@ -64,9 +64,9 @@ Text to display after the gauge value to indicate the type of units. For example
 
 `unitsLabel: '' + String.fromCharCode(186)`
 
-Type: `String`
+*Type*: `String`
 
-Default: `''`
+*Default*: `''`
 
 {{{
 min
@@ -74,9 +74,9 @@ min
 
 Minimum value to display on the gauge; indicated by a small text label on the left-hand side of the gauge.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 max
@@ -84,9 +84,9 @@ max
 
 Maximum value to display on the gauge; indicated by a small text label on the right-hand side of the gauge.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `100`
+*Default*: `100`
 
 {{{
 majorTicks
@@ -94,9 +94,9 @@ majorTicks
 
 Number of "large" ticks around the inner rim of the gauge.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `5`
+*Default*: `5`
 
 {{{
 minorTicks
@@ -104,9 +104,9 @@ minorTicks
 
 Number of small ticks between each pair of major ticks.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `2`
+*Default*: `2`
 
 {{{
 bands
@@ -122,9 +122,9 @@ For example:
 
 `bands: [{ color: '#ccc', from: 0, to: 10 }]`
 
-Type: `Array`
+*Type*: `Array`
 
-Default: `[]`
+*Default*: `[]`
 
 {{{
 colorOftext
@@ -132,9 +132,9 @@ colorOftext
 
 Color of text displayed on the gauge.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgb(0, 0, 0)'`
+*Default*: `'rgb(0, 0, 0)'`
 
 {{{
 warningText
@@ -142,9 +142,9 @@ warningText
 
 Color to use for warning situations, for example when displaying a value outside the min/max range.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgb(255, 0, 0)'`
+*Default*: `'rgb(255, 0, 0)'`
 
 {{{
 colorOfFill
@@ -152,9 +152,9 @@ colorOfFill
 
 Fill colors used to draw the gauge.
 
-Type: `Array`
+*Type*: `Array`
 
-Default: `[ '#111', '#ccc', '#ddd', '#eee' ]`
+*Default*: `[ '#111', '#ccc', '#ddd', '#eee' ]`
 
 {{{
 colorOfPointerFill
@@ -162,9 +162,9 @@ colorOfPointerFill
 
 Color to use to fill the needle.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(255, 100, 0, 0.7)'`
+*Default*: `'rgba(255, 100, 0, 0.7)'`
 
 {{{
 colorOfPointerStroke
@@ -172,9 +172,9 @@ colorOfPointerStroke
 
 Color to use for the outline of the needle.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(255, 100, 100, 0.9)'`
+*Default*: `'rgba(255, 100, 100, 0.9)'`
 
 {{{
 colorOfCenterCircleFill
@@ -182,9 +182,9 @@ colorOfCenterCircleFill
 
 Fill color for the needle's center circle.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(0, 100, 255, 1)'`
+*Default*: `'rgba(0, 100, 255, 1)'`
 
 {{{
 colorOfCenterCircleStroke
@@ -192,9 +192,9 @@ colorOfCenterCircleStroke
 
 Color to use for the outline of the needle's center circle.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(0, 0, 255, 1)'`
+*Default*: `'rgba(0, 0, 255, 1)'`
 
 {{{
 greenFrom
@@ -202,9 +202,9 @@ greenFrom
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 greenTo
@@ -212,9 +212,9 @@ greenTo
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 yellowFrom
@@ -222,9 +222,9 @@ yellowFrom
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 yellowTo
@@ -232,9 +232,9 @@ yellowTo
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 redFrom
@@ -242,9 +242,9 @@ redFrom
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 redTo
@@ -252,9 +252,9 @@ redTo
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 redColor
@@ -262,9 +262,9 @@ redColor
 
 *Deprecated* Use the `bands` option to define band colors.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(255, 0, 0, 0.2)'`
+*Default*: `'rgba(255, 0, 0, 0.2)'`
 
 {{{
 yellowColor
@@ -272,9 +272,9 @@ yellowColor
 
 *Deprecated* Use the `bands` option to define band colors.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(255, 215, 0, 0.2)'`
+*Default*: `'rgba(255, 215, 0, 0.2)'`
 
 {{{
 greenColor
@@ -282,6 +282,6 @@ greenColor
 
 *Deprecated* Use the `bands` option to define band colors.
 
-Type: `String`
+*Type*: `String`
 
-Default: `'rgba(0, 255, 0, 0.2)'`
+*Default*: `'rgba(0, 255, 0, 0.2)'`
