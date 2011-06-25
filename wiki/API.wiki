@@ -40,9 +40,25 @@ Redraws the gauge.
 
 = Options =
 
-{{{
-value
-}}}
+  * [API#value value]
+  * [API#label label]
+  * [API#unitsLabel unitsLabel]
+  * [API#min min]
+  * [API#max max]
+  * [API#majorTicks majorTicks]
+  * [API#minorTicks minorTicks]
+  * [API#bands bands]
+  * [API#colorOfText colorOfText]
+  * [API#warningText warningText]
+  * [API#colorOfFill colorOfFill]
+  * [API#colorOfPointerFill colorOfPointerFill]
+  * [API#colorOfPointerStroke colorOfPointerStroke]
+  * [API#colorOfCenterCircleFill colorOfCenterCircleFill]
+  * [API#colorOfCenterCircleStroke colorOfCenterCircleStroke]
+
+<hr />
+
+== value ==
 
 Value to display on the gauge using both the text label at the bottom of the gauge and the needle.
 
@@ -50,9 +66,9 @@ Value to display on the gauge using both the text label at the bottom of the gau
 
 *Default*: `0`
 
-{{{
-label
-}}}
+<hr />
+
+== label == 
 
 Text label to display at the top of the gauge.
 
@@ -60,9 +76,9 @@ Text label to display at the top of the gauge.
 
 *Default*: `''`
 
-{{{
-unitsLabel
-}}}
+<hr />
+
+== unitsLabel ==
 
 Text to display after the gauge value to indicate the type of units. For example, when displaying a temperature value you might include a degree symbol:
 
@@ -72,9 +88,9 @@ Text to display after the gauge value to indicate the type of units. For example
 
 *Default*: `''`
 
-{{{
-min
-}}}
+<hr />
+
+== min ==
 
 Minimum value to display on the gauge; indicated by a small text label on the left-hand side of the gauge.
 
@@ -82,9 +98,9 @@ Minimum value to display on the gauge; indicated by a small text label on the le
 
 *Default*: `0`
 
-{{{
-max
-}}}
+<hr />
+
+== max ==
 
 Maximum value to display on the gauge; indicated by a small text label on the right-hand side of the gauge.
 
@@ -92,9 +108,9 @@ Maximum value to display on the gauge; indicated by a small text label on the ri
 
 *Default*: `100`
 
-{{{
-majorTicks
-}}}
+<hr />
+
+== majorTicks ==
 
 Number of "large" ticks around the inner rim of the gauge.
 
@@ -102,9 +118,9 @@ Number of "large" ticks around the inner rim of the gauge.
 
 *Default*: `5`
 
-{{{
-minorTicks
-}}}
+<hr />
+
+== minorTicks ==
 
 Number of small ticks between each pair of major ticks.
 
@@ -112,9 +128,9 @@ Number of small ticks between each pair of major ticks.
 
 *Default*: `2`
 
-{{{
-bands
-}}}
+<hr />
+
+== bands ==
 
 Array of objects used to define colored bands along the inner rim of the gauge. Each object contains the following members:
 
@@ -130,9 +146,9 @@ For example:
 
 *Default*: `[]`
 
-{{{
-colorOftext
-}}}
+<hr />
+
+== colorOfText ==
 
 Color of text displayed on the gauge.
 
@@ -140,9 +156,9 @@ Color of text displayed on the gauge.
 
 *Default*: `'rgb(0, 0, 0)'`
 
-{{{
-warningText
-}}}
+<hr />
+
+== warningText ==
 
 Color to use for warning situations, for example when displaying a value outside the min/max range.
 
@@ -150,9 +166,9 @@ Color to use for warning situations, for example when displaying a value outside
 
 *Default*: `'rgb(255, 0, 0)'`
 
-{{{
-colorOfFill
-}}}
+<hr /> 
+
+== colorOfFill ==
 
 Fill colors used to draw the gauge.
 
@@ -160,9 +176,9 @@ Fill colors used to draw the gauge.
 
 *Default*: `[ '#111', '#ccc', '#ddd', '#eee' ]`
 
-{{{
-colorOfPointerFill
-}}}
+<hr />
+
+== colorOfPointerFill ==
 
 Color to use to fill the needle.
 
@@ -170,9 +186,9 @@ Color to use to fill the needle.
 
 *Default*: `'rgba(255, 100, 0, 0.7)'`
 
-{{{
-colorOfPointerStroke
-}}}
+<hr />
+
+== colorOfPointerStroke ==
 
 Color to use for the outline of the needle.
 
@@ -180,9 +196,9 @@ Color to use for the outline of the needle.
 
 *Default*: `'rgba(255, 100, 100, 0.9)'`
 
-{{{
-colorOfCenterCircleFill
-}}}
+<hr />
+
+== colorOfCenterCircleFill ==
 
 Fill color for the needle's center circle.
 
@@ -190,9 +206,9 @@ Fill color for the needle's center circle.
 
 *Default*: `'rgba(0, 100, 255, 1)'`
 
-{{{
-colorOfCenterCircleStroke
-}}}
+<hr />
+
+== colorOfCenterCircleStroke ==
 
 Color to use for the outline of the needle's center circle.
 
@@ -200,9 +216,9 @@ Color to use for the outline of the needle's center circle.
 
 *Default*: `'rgba(0, 0, 255, 1)'`
 
-{{{
-greenFrom
-}}}
+<hr />
+
+== greenFrom ==
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
@@ -210,9 +226,9 @@ greenFrom
 
 *Default*: `0`
 
-{{{
-greenTo
-}}}
+<hr />
+
+== greenTo ==
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
@@ -220,9 +236,9 @@ greenTo
 
 *Default*: `0`
 
-{{{
-yellowFrom
-}}}
+<hr />
+
+== yellowFrom ==
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
@@ -230,9 +246,9 @@ yellowFrom
 
 *Default*: `0`
 
-{{{
-yellowTo
-}}}
+<hr />
+
+== yellowTo ==
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
@@ -240,9 +256,9 @@ yellowTo
 
 *Default*: `0`
 
-{{{
-redFrom
-}}}
+<hr />
+
+== redFrom ==
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
@@ -250,9 +266,9 @@ redFrom
 
 *Default*: `0`
 
-{{{
-redTo
-}}}
+<hr />
+
+== redTo ==
 
 *Deprecated* Use the `bands` option to define the range of colored bands.
 
@@ -260,9 +276,9 @@ redTo
 
 *Default*: `0`
 
-{{{
-redColor
-}}}
+<hr />
+
+== redColor ==
 
 *Deprecated* Use the `bands` option to define band colors.
 
@@ -270,9 +286,9 @@ redColor
 
 *Default*: `'rgba(255, 0, 0, 0.2)'`
 
-{{{
-yellowColor
-}}}
+<hr />
+
+== yellowColor ==
 
 *Deprecated* Use the `bands` option to define band colors.
 
@@ -280,9 +296,9 @@ yellowColor
 
 *Default*: `'rgba(255, 215, 0, 0.2)'`
 
-{{{
-greenColor
-}}}
+<hr />
+
+== greenColor ==
 
 *Deprecated* Use the `bands` option to define band colors.
 
