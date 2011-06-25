@@ -126,24 +126,75 @@ Type: `Array`
 
 Default: `[]`
 
-
-
-TODO:
 {{{
-text
+colorOftext
 }}}
 
+Color of text displayed on the gauge.
 
-                text:    options.colorOfText || 'rgb(0, 0, 0)',
-                warningText:    options.colorOfWarningText || 'rgb(255, 0, 0)',
-                fill:    options.colorOfFill || [ '#111', '#ccc', '#ddd', '#eee' ],
-                pointerFill:    options.colorOfPointerFill || 'rgba(255, 100, 0, 0.7)',
-                pointerStroke:    options.colorOfPointerStroke || 'rgba(255, 100, 100, 0.9)',
-                centerCircleFill:    options.colorOfCenterCircleFill || 'rgba(0, 100, 255, 1)',
-                centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
+Type: `String`
 
+Default: `'rgb(0, 0, 0)'`
 
+{{{
+warningText
+}}}
 
+Color to use for warning situations, for example when displaying a value outside the min/max range.
+
+Type: `String`
+
+Default: `'rgb(255, 0, 0)'`
+
+{{{
+colorOfFill
+}}}
+
+Fill colors used to draw the gauge.
+
+Type: `Array`
+
+Default: `[ '#111', '#ccc', '#ddd', '#eee' ]`
+
+{{{
+colorOfPointerFill
+}}}
+
+Color to use to fill the needle.
+
+Type: `String`
+
+Default: `'rgba(255, 100, 0, 0.7)'`
+
+{{{
+colorOfPointerStroke
+}}}
+
+Color to use for the outline of the needle.
+
+Type: `String`
+
+Default: `'rgba(255, 100, 100, 0.9)'`
+
+{{{
+colorOfCenterCircleFill
+}}}
+
+Fill color for the needle's center circle.
+
+Type: `String`
+
+Default: `'rgba(0, 100, 255, 1)'`
+
+{{{
+colorOfCenterCircleStroke
+}}}
+
+Color to use for the outline of the needle's center circle.
+
+Type: `String`
+
+Default: `'rgba(0, 0, 255, 1)'`
 
 {{{
 greenFrom
