@@ -22,7 +22,7 @@ Creates a new gauge control. The jQuery selector should point to a canvas tag:
 jQuery("#test_overflow_max").gauge('init', options);
 }}}
 
-See [API#options] for more information on available options.
+See [API#Options] for more information on available options.
 
 Note that a gauge may also be initialized by calling the `gauge` function without any arguments:
 
@@ -54,4 +54,4 @@ jQuery("#test_overflow_max").gauge('draw');
 
 = Options =
 
-See [API#options].
+See [API#Options].
