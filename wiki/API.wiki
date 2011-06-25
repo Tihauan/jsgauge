@@ -17,7 +17,7 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
 
 `<canvas id="test_default" width="250" height="250"></canvas>`
 
-Arguments:
+*Arguments*:
 
   * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
   * options - Options object; see options section below for details.
@@ -42,9 +42,9 @@ value
 
 Value to display on the gauge using both the text label at the bottom of the gauge and the needle.
 
-Type: `Number`
+*Type*: `Number`
 
-Default: `0`
+*Default*: `0`
 
 {{{
 label
