@@ -15,11 +15,17 @@ This page describes the API for the pure JavaScript `Gauge` component.
 
 == Gauge( canvas, options ) ==
 
-Gauge constructor, call this using `new` to create an instance of the gauge.
+Gauge constructor, call this using `new` to create an instance of the gauge:
 
-To create a gauge, you need a reference to a `canvas` tag that you would like to use for the gauge. For example: 
+{{{
+new Gauge( document.getElementById( 'test_default' ) );
+}}}
 
-`<canvas id="test_default" width="250" height="250"></canvas>`
+To create a gauge, you need a reference to a `canvas` tag that you would like to use for the gauge, for example: 
+
+{{{
+<canvas id="test_default" width="250" height="250"></canvas>
+}}}
 
 *Arguments*:
 
@@ -38,6 +44,8 @@ Changes the value displayed on a gauge.
 
 Redraws the gauge.
 
+<hr />
+
 = Options =
 
   * [API#value value]
@@ -49,7 +57,7 @@ Redraws the gauge.
   * [API#minorTicks minorTicks]
   * [API#bands bands]
   * [API#colorOfText colorOfText]
-  * [API#warningText warningText]
+  * [API#warningText colorOfWarningText]
   * [API#colorOfFill colorOfFill]
   * [API#colorOfPointerFill colorOfPointerFill]
   * [API#colorOfPointerStroke colorOfPointerStroke]
@@ -82,7 +90,9 @@ Text label to display at the top of the gauge.
 
 Text to display after the gauge value to indicate the type of units. For example, when displaying a temperature value you might include a degree symbol:
 
-`unitsLabel: '' + String.fromCharCode(186)`
+{{{
+unitsLabel: '' + String.fromCharCode(186)
+}}}
 
 *Type*: `String`
 
@@ -140,7 +150,12 @@ Array of objects used to define colored bands along the inner rim of the gauge. 
 
 For example:
 
-`bands: [{ color: '#ccc', from: 0, to: 10 }]`
+{{{
+bands: [
+   { color: '#ccc', from: 0, to: 10 },
+   { color: '#ddd', from: 10, to: 20 }
+]
+}}}
 
 *Type*: `Array`
 
@@ -158,7 +173,7 @@ Color of text displayed on the gauge.
 
 <hr />
 
-== warningText ==
+== colorOfWarningText ==
 
 Color to use for warning situations, for example when displaying a value outside the min/max range.
 
