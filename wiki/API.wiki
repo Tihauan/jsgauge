@@ -24,9 +24,13 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
   * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
   * options - Object of optional parameters; see [API#Options options] section below for details.
 
+<hr />
+
 == setValue ( value ) ==
 
 Changes the value displayed on a gauge.
+
+<hr />
 
 == draw () ==
 
