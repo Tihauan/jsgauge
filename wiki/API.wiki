@@ -256,10 +256,32 @@ Type: `Number`
 
 Default: `0`
 
+{{{
+redColor
+}}}
 
+*Deprecated* Use the `bands` option to define band colors.
 
-                // START - Deprecated
-                redBand: options.colorOfRedBand || options.redColor || 'rgba(255, 0, 0, 0.2)',
-                yelBand: options.colorOfYellowBand || options.yellowColor || 'rgba(255, 215, 0, 0.2)',
-                grnBand: options.colorOfGreenBand || options.greenColor || 'rgba(0, 255, 0, 0.2)'
-                // END - Deprecated
+Type: `String`
+
+Default: `'rgba(255, 0, 0, 0.2)'`
+
+{{{
+yellowColor
+}}}
+
+*Deprecated* Use the `bands` option to define band colors.
+
+Type: `String`
+
+Default: `'rgba(255, 215, 0, 0.2)'`
+
+{{{
+greenColor
+}}}
+
+*Deprecated* Use the `bands` option to define band colors.
+
+Type: `String`
+
+Default: `'rgba(0, 255, 0, 0.2)'`
