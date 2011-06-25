@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This page describes the jsgauge API.
+This page describes the API for the pure JavaScript `Gauge` component.
 
 
 = Methods =
@@ -126,36 +126,84 @@ Type: `Array`
 
 Default: `[]`
 
-                // START - Deprecated
-                greenFrom: [].concat(options.greenFrom || 0),
-                greenTo: [].concat(options.greenTo || 0),
-                yellowFrom: [].concat(options.yellowFrom || 0),
-                yellowTo: [].concat(options.yellowTo || 0),
-                redFrom: [].concat(options.redFrom || 0),
-                redTo: [].concat(options.redTo || 0)
-                // END - Deprecated
 
+
+TODO:
+{{{
+text
+}}}
 
 
                 text:    options.colorOfText || 'rgb(0, 0, 0)',
-
-
                 warningText:    options.colorOfWarningText || 'rgb(255, 0, 0)',
-
-
                 fill:    options.colorOfFill || [ '#111', '#ccc', '#ddd', '#eee' ],
-
-
                 pointerFill:    options.colorOfPointerFill || 'rgba(255, 100, 0, 0.7)',
-
-
                 pointerStroke:    options.colorOfPointerStroke || 'rgba(255, 100, 100, 0.9)',
-
-
                 centerCircleFill:    options.colorOfCenterCircleFill || 'rgba(0, 100, 255, 1)',
-
-
                 centerCircleStroke:    options.colorOfCenterCircleStroke || 'rgba(0, 0, 255, 1)',
+
+
+
+
+{{{
+greenFrom
+}}}
+
+*Deprecated* Use the `bands` option to define the range of colored bands.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+greenTo
+}}}
+
+*Deprecated* Use the `bands` option to define the range of colored bands.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+yellowFrom
+}}}
+
+*Deprecated* Use the `bands` option to define the range of colored bands.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+yellowTo
+}}}
+
+*Deprecated* Use the `bands` option to define the range of colored bands.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+redFrom
+}}}
+
+*Deprecated* Use the `bands` option to define the range of colored bands.
+
+Type: `Number`
+
+Default: `0`
+
+{{{
+redTo
+}}}
+
+*Deprecated* Use the `bands` option to define the range of colored bands.
+
+Type: `Number`
+
+Default: `0`
 
 
 
