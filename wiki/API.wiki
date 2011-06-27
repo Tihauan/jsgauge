@@ -38,6 +38,10 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
 
 Changes the value displayed on a gauge.
 
+*Arguments*:
+
+  * value - Numeric value to display.
+
 <hr />
 
 == draw () ==
