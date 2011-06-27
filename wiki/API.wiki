@@ -67,6 +67,16 @@ Redraws the gauge.
   * [API#colorOfPointerStroke colorOfPointerStroke]
   * [API#colorOfCenterCircleFill colorOfCenterCircleFill]
   * [API#colorOfCenterCircleStroke colorOfCenterCircleStroke]
+  * ~~[API#greenFrom greenFrom]~~
+  * ~~[API#greenTo greenTo]~~
+  * ~~[API#yellowFrom yellowFrom]~~
+  * ~~[API#yellowTo yellowTo]~~
+  * ~~[API#redFrom redFrom]~~
+  * ~~[API#redTo redTo]~~
+  * ~~[API#redColor redColor]~~
+  * ~~[API#yellowColor yellowColor]~~
+  * ~~[API#greenColor greenColor]~~
+
 
 <hr />
 
