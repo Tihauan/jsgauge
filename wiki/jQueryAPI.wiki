@@ -6,6 +6,8 @@ This page describes the jQuery API provided by jsgauge. Note that in order to us
 
 The plugin creates a new jQuery function called `gauge`.
 
+The <a href="http://jsgauge.googlecode.com/svn/trunk/src/example/jquery-example.html">Simple jQuery Example</a> page contains a small, complete example of how to use this plugin.
+
 = Methods =
 
   * [jQueryAPI#init init]
