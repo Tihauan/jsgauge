@@ -1,6 +1,13 @@
 /*jslint browser: true */
 function Gauge( canvas, options ) {
 	var that = this;
+
+    this.requestAnimFrame = window.requestAnimationFrame || 
+            window.webkitRequestAnimationFrame || 
+            window.mozRequestAnimationFrame || 
+            window.oRequestAnimationFrame || 
+            window.msRequestAnimationFrame;
+
 	this.canvas = canvas;
 	options = options || {};
 
@@ -328,7 +335,11 @@ function Gauge( canvas, options ) {
 			that.settings.min) / (span / 100);
 			that.draw();
 			if (that.settings.pointerValue != pointerValue) {
-				setTimeout(adjustValue, 50); // Draw another frame
+                if (typeof that.requestAnimFrame != 'undefined') {
+                    that.requestAnimFrame.call(window, adjustValue);
+                } else {
+                    setTimeout(adjustValue, 50); // Draw another frame
+                }
 			}
 		}
 
