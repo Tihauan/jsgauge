@@ -53,6 +53,7 @@ Redraws the gauge.
 = Options =
 
   * [API#value value]
+  * [API#valueFormat valueFormat]
   * [API#label label]
   * [API#unitsLabel unitsLabel]
   * [API#min min]
@@ -87,6 +88,14 @@ Value to display on the gauge using both the text label at the bottom of the gau
 *Type*: `Number`
 
 *Default*: `0`
+
+<hr />
+
+== valueFormat ==
+
+A function that accepts two parameters (value, decimals) and returns a string value to be displayed for that specific value.
+
+*Type*: `Function`
 
 <hr />
 
