@@ -114,9 +114,19 @@
 				testOverflowMax = new Gauge( document.getElementById( 'test_overflow_max' ), {label: "Overflow max"});
 				testOverflowMax.setValue(110);
 
-				periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {label: "Updates"});
+                periodicRand = new Gauge( document.getElementById( 'test_random_update' ), {
+                    label: "Updates"
+                    , max: 10000
+                    , valueFormat: function (value, decimals) {
+                        if (value > 1024) {
+                            value = value / 1024;
+                            return value.toFixed(decimals) + 'KB'; //-->
+                        }
+                        return value.toFixed(decimals) + ' B'; //-->
+                    }
+                });
 				setInterval(function() {
-					periodicRand.setValue( Math.floor(Math.random()*100) );
+					periodicRand.setValue( Math.floor(Math.random()*10000) );
 				}, 3000);
 
 				// Draw gauge and use custom bands
