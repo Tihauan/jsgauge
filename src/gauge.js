@@ -14,6 +14,7 @@ function Gauge( canvas, options ) {
 	// Gauge settings
 	this.settings = {
 		value: options.value || 0,
+        valueFormat: options.valueFormat || null,
 		pointerValue: options.value || 0,
 		label: options.label || '',
 		unitsLabel: options.unitsLabel || '',
@@ -32,6 +33,24 @@ function Gauge( canvas, options ) {
 		redTo: [].concat(options.redTo || 0)
 		// END - Deprecated
 	};
+
+    function formatValue(value, decimals) {
+        var
+            ret
+
+        // Custom formatter
+        if (typeof that.settings.valueFormat == 'function') {
+            return that.settings.valueFormat(value, decimals); //-->
+        }
+        
+        // Default formatter
+        ret = value.toFixed( decimals );
+        while ( ( decimals > 0 ) && ret.match( /^\d+\.(\d+)?0$/ ) ) {
+            decimals -= 1;
+            ret = value.toFixed( decimals );
+        }
+        return ret;
+    }
 
 	// settings normalized to a [0, 100] interval
 	function normalize( settings ) {
@@ -258,17 +277,9 @@ function Gauge( canvas, options ) {
 
 	this.drawValues = function( min, max, value, decimals ) {
 		var deg, fontSize, metrics, valueText;
-		function formatNum( value, decimals ) {
-			var ret = value.toFixed( decimals );
-			while ( ( decimals > 0 ) && ret.match( /^\d+\.(\d+)?0$/ ) ) {
-				decimals -= 1;
-				ret = value.toFixed( decimals );
-			}
-			return ret;
-		}
 
 		// value text
-        valueText = formatNum( value, decimals ) + that.settings.unitsLabel;
+        valueText = formatValue( value, decimals ) + that.settings.unitsLabel;
 		fontSize = this.radius / 5;
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		metrics = measureText( this.c2d, valueText );
@@ -287,7 +298,7 @@ function Gauge( canvas, options ) {
 		fontSize = this.radius / 8;
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
 		this.c2d.fillStyle = that.colors.text;
-		fillText( this.c2d, formatNum( min, decimals ), 0, 0 );
+		fillText( this.c2d, formatValue( min, decimals ), 0, 0 );
 		this.restore();
 
 		// max label
@@ -297,9 +308,9 @@ function Gauge( canvas, options ) {
 			this.radius * 0.65 * Math.cos( deg ) );
 		fontSize = this.radius / 8;
 		styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
-		metrics = measureText( this.c2d, formatNum( max, decimals ) );
+		metrics = measureText( this.c2d, formatValue( max, decimals ) );
 		this.c2d.fillStyle = that.colors.text;
-		fillText( this.c2d, formatNum( max, decimals ), - metrics, 0 );
+		fillText( this.c2d, formatValue( max, decimals ), - metrics, 0 );
 		this.restore();
 	};
 
