@@ -67,25 +67,22 @@
 				new Gauge( document.getElementById( 'test_custom'), options );
 
 				// Draw the gauge using custom settings (medium)
-				options = {
-					value: -60,
+				var gm_options = {
+					value: 0,
 					label: 'Hello!',
 					unitsLabel: ' %',
 					min: -100,
 					max: 100,
 					majorTicks: 4,
-					minorTicks: 3, // small ticks inside each major tick
-					greenFrom: -10,
-					greenTo: 10,
-					greenColor: '#00FF00', // full green
-					yellowFrom: 10,
-					yellowTo: 30,
-					yellowColor: '#FFFF00', // full yellow
-					redFrom: 30,
-					redTo: 100,
-					redColor:  '#FF0000' // full red
+					minorTicks: 3 // small ticks inside each major tick
 				};
-				gm = new Gauge( document.getElementById( 'test_medium'), options );
+				gm = new Gauge( document.getElementById( 'test_medium'), gm_options );
+                setInterval(function() {
+                    gm_options.max = Math.round(Math.random()*100);
+                    gm_options.min = -gm_options.max;
+                    gm.setOptions(gm_options);
+                    gm.draw();
+                }, 2000);
 				gm.setValue( 80 );
 
 				// Draw the gauge using custom settings (small)
