@@ -8,6 +8,7 @@ This page describes the API for the pure JavaScript `Gauge` component.
 = Methods =
 
   * [API#Gauge(_canvas,_options_) Gauge]
+  * [API#setOptions_(_value_) setOptions]
   * [API#setValue_(_value_) setValue]
   * [API#draw_() draw]
 
@@ -31,6 +32,16 @@ To create a gauge, you need a reference to a `canvas` tag that you would like to
 
   * canvas - Reference to a DOM object containing the `<canvas>` tag to use for the gauge.
   * options - Object of optional parameters; see [API#Options options] section below for details.
+
+<hr />
+
+== setOptions ( value ) ==
+
+Changes the initial gauge options on the fly. To update the display, call draw() or setValue() after setting the new options.
+
+*Arguments*:
+
+  * value - Options object, see below.
 
 <hr />
 
