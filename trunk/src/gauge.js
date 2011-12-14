@@ -7,6 +7,14 @@ function Gauge( canvas, options ) {
         window.mozRequestAnimationFrame || 
         window.oRequestAnimationFrame || 
         window.msRequestAnimationFrame;
+        
+    this.cancelRequestAnimFrame = window.cancelAnimationFrame ||
+        window.webkitCancelRequestAnimationFrame ||
+        window.mozCancelRequestAnimationFrame ||
+        window.oCancelRequestAnimationFrame ||
+        window.msCancelRequestAnimationFrame;
+        
+    this.animationToken = null;
 
     this.canvas = canvas;
 
@@ -324,12 +332,19 @@ function Gauge( canvas, options ) {
 
 Gauge.prototype.setValue = function( value ) {
     var that = this,
-    pointerValue = (value > that.settings.max) ?
-        that.settings.max :  // Nomalize to max value
-        (value < that.settings.min) ?
-        that.settings.min :  // Nomalize to min value
-        value,
-    increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
+        pointerValue = (value > that.settings.max) ?
+          that.settings.max :  // Nomalize to max value
+          (value < that.settings.min) ?
+          that.settings.min :  // Nomalize to min value
+          value,
+        increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
+        
+    // Clear timeouts
+    if (that.cancelRequestAnimFrame) {
+      that.cancelRequestAnimFrame(that.animationToken);
+    } else {
+      clearTimeout(that.animationToken);
+    }
 
     function adjustValue() {
         var span;
@@ -350,9 +365,9 @@ Gauge.prototype.setValue = function( value ) {
         that.draw();
         if (that.settings.pointerValue != pointerValue) {
             if (typeof that.requestAnimFrame != 'undefined') {
-                that.requestAnimFrame.call(window, adjustValue);
+                that.animationToken = that.requestAnimFrame.call(window, adjustValue);
             } else {
-                setTimeout(adjustValue, 50); // Draw another frame
+                that.animationToken = setTimeout(adjustValue, 50); // Draw another frame
             }
         }
     }
