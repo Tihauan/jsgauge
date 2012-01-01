@@ -340,10 +340,13 @@ Gauge.prototype.setValue = function( value ) {
         increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
         
     // Clear timeouts
-    if (that.cancelRequestAnimFrame) {
-      that.cancelRequestAnimFrame(that.animationToken);
-    } else {
-      clearTimeout(that.animationToken);
+    if (animationToken !== null) {
+        if (that.cancelRequestAnimFrame) {
+            that.cancelRequestAnimFrame(that.animationToken);
+        } else {
+            clearTimeout(that.animationToken);
+        }
+        animationToken = null;
     }
 
     function adjustValue() {
