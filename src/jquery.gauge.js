@@ -87,7 +87,7 @@
         return this.each(function(){
             var gauge = $(this).data('gauge');
             if (gauge != null) {        
-                gauge.draw( value );
+                gauge.draw();
             }
         });
     }
