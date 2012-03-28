@@ -382,7 +382,7 @@ Gauge.prototype.setValue = function( value ) {
             if (typeof that.requestAnimFrame != 'undefined') {
                 that.animationToken = that.requestAnimFrame.call(window, adjustValue);
             } else {
-                that.animationToken = setTimeout(adjustValue, 50); // Draw another frame
+                that.animationToken = setTimeout(adjustValue, 1000 / 60); // Draw another frame
             }
         } else {
             // There is no more animation, so clear the token
