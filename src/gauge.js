@@ -1,4 +1,11 @@
 /*jslint browser: true */
+
+/**
+ * Creates a new Gauge
+ * @param {DOM Object} canvas           The gauge will be created inside of this canvas element
+ * @param {Object} options              Optional parameters
+ * @constructor
+ */
 function Gauge( canvas, options ) {
     var that = this;
 
@@ -9,6 +16,7 @@ function Gauge( canvas, options ) {
         window.msRequestAnimationFrame;
         
     this.cancelRequestAnimFrame = window.cancelAnimationFrame ||
+        window.webkitCancelAnimationFrame ||
         window.webkitCancelRequestAnimationFrame ||
         window.mozCancelRequestAnimationFrame ||
         window.oCancelRequestAnimationFrame ||
@@ -341,11 +349,15 @@ Gauge.prototype.setValue = function( value ) {
         
     // Clear timeouts
     if (that.animationToken !== null) {
-        if (that.cancelRequestAnimFrame) {
-            that.cancelRequestAnimFrame(that.animationToken);
-        } else {
-            clearTimeout(that.animationToken);
-        }
+        //try {
+            if (that.cancelRequestAnimFrame){
+                if (that.cancelRequestAnimFrame.arguments != null) {
+                    that.cancelRequestAnimFrame(that.animationToken);
+                }
+            } else {
+                clearTimeout(that.animationToken);
+            }
+        //} catch (e){}
         that.animationToken = null;
     }
 
@@ -372,6 +384,9 @@ Gauge.prototype.setValue = function( value ) {
             } else {
                 that.animationToken = setTimeout(adjustValue, 50); // Draw another frame
             }
+        } else {
+            // There is no more animation, so clear the token
+            that.animationToken = null;
         }
     }
 
