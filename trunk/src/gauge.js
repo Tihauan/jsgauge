@@ -40,6 +40,7 @@ function Gauge( canvas, options ) {
             majorTicks: options.majorTicks || 5,
             minorTicks: options.minorTicks || 2, // small ticks inside each major tick
             bands: [].concat(options.bands || []),
+            majorTickLabel: options.majorTickLabel || false,	// show major tick label
 
             // START - Deprecated
             greenFrom: [].concat(options.greenFrom || 0),
@@ -294,7 +295,7 @@ function Gauge( canvas, options ) {
         }
     };
 
-    this.drawValues = function( min, max, value, decimals ) {
+    this.drawValues = function( min, max, value, decimals, majorTicks ) {
         var deg, fontSize, metrics, valueText;
 
         // value text
@@ -309,6 +310,46 @@ function Gauge( canvas, options ) {
         }
         fillText( this.c2d, valueText, - metrics/ 2, this.radius * 0.72 );
 
+		// terryc: major tick label
+		if (majorTicks > 1) {
+			var radiusSpan = 13 / (majorTicks - 1);
+			var tickNum = (max - min) / (majorTicks - 1);
+			fontSize = this.radius / 8;
+			for (var i = 1, j = min + tickNum; i < (majorTicks - 1); i++, j += tickNum) {
+				var x, y, z;
+				metrics = measureText( this.c2d, formatValue(j, decimals ) );
+				z = (14.5 - (radiusSpan * i));
+				x = 0;
+				y = 0;
+				if (z <= 6) {
+					x = -(metrics/3) * 2;
+				}
+				else if (6 < z && z < 10) {
+					x = -((10-z)/2) * (metrics/3);
+				}
+				
+				if (z <= 2 || z >= 14) {
+					y = -(fontSize / 2);
+				}
+				else if (6 <= z &&  z <= 10) {
+					y = fontSize / 2;
+				} else if (2 < z && z < 6) {
+					y = (z - 4) * fontSize / 4;
+				}
+				else if (10 < z &&  z < 14) {
+					y = (12 - z) * fontSize / 4;
+				}
+				this.save();
+				deg = Math.PI * z/8;
+				this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
+					this.radius * 0.65 * Math.cos( deg ));
+				styleText( this.c2d, fontSize.toFixed(0) + 'px sans-serif');
+				this.c2d.fillStyle = that.colors.text;
+				fillText( this.c2d, formatValue( j, decimals ), x, y );
+				this.restore();
+			}
+		}
+
         // min label
         this.save();
         deg = Math.PI * 14.5/8;
@@ -322,7 +363,7 @@ function Gauge( canvas, options ) {
 
                            // max label
                            this.save();
-                           deg = Math.PI * 17.5/8;
+                           deg = Math.PI * 1.5/8;
                            this.c2d.translate( this.radius * 0.65 * Math.sin( deg ),
                                               this.radius * 0.65 * Math.cos( deg ) );
                                               fontSize = this.radius / 8;
@@ -345,7 +386,8 @@ Gauge.prototype.setValue = function( value ) {
           (value < that.settings.min) ?
           that.settings.min :  // Nomalize to min value
           value,
-        increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
+//        increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
+		increment = Math.max(Math.abs( that.settings.pointerValue - pointerValue ) / 8, 3);
         
     // Clear timeouts
     if (that.animationToken !== null) {
@@ -452,5 +494,6 @@ Gauge.prototype.draw = function() {
                  this.settings.min,
                  this.settings.max,
                  this.settings.value,
-                 this.relSettings.decimals );
+                 this.relSettings.decimals,
+               ((this.settings.majorTickLabel == true)? this.relSettings.majorTicks : 0));
 };

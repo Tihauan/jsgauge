@@ -46,7 +46,7 @@
 				var options, gm, gms, testOverflowMin, testOverflowMax,periodicRand;
 
 				// Draw the gauge using default settings
-				new Gauge( document.getElementById( 'test_default' ) );
+				new Gauge( document.getElementById( 'test_default' ), {majorTickLabel: true});
 
 				// Draw the gauge using custom settings
 				options = {
@@ -105,6 +105,7 @@
 
 				// Draw gauge and use overflow values (min)
 				testOverflowMin = new Gauge( document.getElementById( 'test_overflow_min' ), {label: "Overflow min"});
+
 				testOverflowMin.setValue(-10);
 
 				// Draw gauge and use overflow values (max)
