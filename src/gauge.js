@@ -18,6 +18,7 @@ function Gauge( canvas, options ) {
     this.cancelRequestAnimFrame = window.cancelAnimationFrame ||
         window.webkitCancelAnimationFrame ||
         window.webkitCancelRequestAnimationFrame ||
+        window.mozCancelAnimationFrame ||
         window.mozCancelRequestAnimationFrame ||
         window.oCancelRequestAnimationFrame ||
         window.msCancelRequestAnimationFrame;
