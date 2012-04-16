@@ -152,10 +152,10 @@ function Gauge( canvas, options ) {
         }
 
         // Default formatter
-        ret = value.toFixed( decimals );
+        ret = (parseFloat(value)).toFixed( decimals );
         while ( ( decimals > 0 ) && ret.match( /^(-)?\d+\.(\d+)?0$/ ) ) {
             decimals -= 1;
-            ret = value.toFixed( decimals );
+            ret = (parseFloat(value)).toFixed( decimals );
         }
         return ret;
     }
