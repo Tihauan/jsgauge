@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>jsgauge - Simple jQuery Example</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://jsgauge.googlecode.com/svn/trunk/src/gauge.js"></script>
+    <script type="text/javascript" src="http://jsgauge.googlecode.com/svn/trunk/src/jquery.gauge.js"></script>
+  </head>
+  <body>
+    <canvas id="example" width="450" height="450"></canvas>
+
+    <script type="text/javascript">
+      jQuery(document).ready(function(){
+        jQuery("#example")
+          .gauge({
+             min: 0,
+             max: 7000,
+             label: 'RPM',
+             bands: [{color: "#ff0000", from: 6000, to: 7000}]
+           })
+          .gauge('setValue', 3250);
+        });
+    </script>
+  </body>
+</html>
