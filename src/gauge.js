@@ -429,6 +429,7 @@ Gauge.prototype.setValue = function( value ) {
         }
     }
 
+    value = parseFloat(value);
     if ( !isNaN(value) && this.settings.value !== value ) {
         this.settings.value = value;
         pointerValue = (value > that.settings.max) 
