@@ -382,13 +382,9 @@ function Gauge( canvas, options ) {
 
 Gauge.prototype.setValue = function( value ) {
     var that = this,
-        pointerValue = (value > that.settings.max) ?
-          that.settings.max :  // Nomalize to max value
-          (value < that.settings.min) ?
-          that.settings.min :  // Nomalize to min value
-          value,
-//        increment = Math.abs( that.settings.pointerValue - pointerValue ) / 20;
-		increment = Math.max(Math.abs( that.settings.pointerValue - pointerValue ) / 8, 3);
+        pointerValue,
+        increment;
+        
         
     // Clear timeouts
     if (that.animationToken !== null) {
@@ -435,6 +431,12 @@ Gauge.prototype.setValue = function( value ) {
 
     if ( !isNaN(value) && this.settings.value !== value ) {
         this.settings.value = value;
+        pointerValue = (value > that.settings.max) 
+          ? that.settings.max :  // Nomalize to max value
+          (value < that.settings.min) ?
+          that.settings.min :  // Nomalize to min value
+          value;
+        increment = Math.max(Math.abs( that.settings.pointerValue - pointerValue ) / 8, 3);
         adjustValue();
     }
 };
