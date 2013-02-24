@@ -1,5 +1,5 @@
 PROJECT_NAME: jsgauge
-VERSION: "0.4.4"
+VERSION: "0.4.5"
 COPYRIGHT_NOTICE: |
       /*
        * #{PROJECT_NAME} #{VERSION}

@@ -6,7 +6,6 @@ PROJECT_CONF_DIR = File.join(PROJECT_ROOT, 'cfg')
 PROJECT_LIB_DIR  = File.join(PROJECT_ROOT, 'lib')
 PROJECT_DIST_DIR = File.join(PROJECT_ROOT, 'build')
 PROJECT_PACKAGE_DIR = File.join(PROJECT_ROOT, 'release')
-PROJECT_JSLINT_CONFIG =  
 
 $conf            = YAML.load(IO.read(File.join(PROJECT_CONF_DIR, 'constants.yml')))
 PROJECT_VERSION  = $conf['VERSION']
@@ -32,7 +31,7 @@ def minify(src, dest)
 end
 
 desc 'Minify, add copyright and copy files to the build folder'
-task :build => [:clean, :lint] do
+task :build => [:clean] do
 	puts "== Building #{PROJECT_NAME}-#{PROJECT_VERSION}"
 
 	# copy and minify all source files
