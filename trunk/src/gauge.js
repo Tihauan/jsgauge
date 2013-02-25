@@ -390,9 +390,7 @@ Gauge.prototype.setValue = function( value ) {
     if (that.animationToken !== null) {
         //try {
             if (that.cancelRequestAnimFrame){
-                if (that.cancelRequestAnimFrame.arguments != null) {
-                    that.cancelRequestAnimFrame(that.animationToken);
-                }
+                that.cancelRequestAnimFrame.call(window, that.animationToken);
             } else {
                 clearTimeout(that.animationToken);
             }
